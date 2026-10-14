@@ -105,20 +105,13 @@
             <input
               id="q"
               type="text"
-              placeholder="搜索资料名称、拼音首字母、事由或责任部门…"
+              placeholder="搜索资料名称、摘要或责任部门…"
               autocomplete="off"
             />
             <button class="clear-q" id="clear-q" type="button" aria-label="清空搜索">✕</button>
           </div>
 
           <div class="filter-actions">
-            <!-- Segmented Status Switch -->
-            <div class="segmented-control" id="statusSegment">
-              <button class="segment-btn active" data-status="published">仅看有效</button>
-              <button class="segment-btn" data-status="with-archived">含已归档</button>
-              <button class="segment-btn" data-status="archived">仅看已归档</button>
-            </div>
-
             <!-- Topic Select -->
             <div class="select-wrap">
               <select class="custom-select" id="topic" aria-label="业务主题">
@@ -157,6 +150,18 @@
               <span class="select-chevron">▼</span>
             </div>
           </label>
+          <label class="field">
+            <span>资料状态</span>
+            <div class="select-wrap">
+              <select class="custom-select" id="status" aria-label="资料状态">
+                <option value="published">仅看有效</option>
+                <option value="with-archived">含已归档</option>
+                <option value="archived">仅看已归档</option>
+              </select>
+              <span class="select-chevron">▼</span>
+            </div>
+          </label>
+          <p class="field-hint">列表默认只展示现行资料。被新版本替换或已废止的文件保留在归档中，不作为办事依据。</p>
         </div>
       </section>
 
@@ -173,7 +178,6 @@
           <span>类型</span>
           <span>主题领域</span>
           <span>适用对象</span>
-          <span>版本与状态</span>
           <span>更新日期</span>
           <span>责任部门</span>
           <span style="text-align:right">操作</span>
@@ -209,13 +213,14 @@
           <span class="badge-micro" id="preview-badge">PDF</span>
           <h2 id="preview-title">资料名称</h2>
           <div class="preview-meta-tags">
-            <span class="status-pill" id="preview-status">有效</span>
+            <span class="preview-version" id="preview-version">v3.2</span>
+            <span class="status-pill archived" id="preview-status" hidden>已归档</span>
             <span class="topic-tag" id="preview-topic">人力资源</span>
           </div>
         </div>
         <div class="preview-actions-right">
-          <a class="preview-download" id="preview-download" href="#" hidden onclick="handleDownloadToast(event)">
-            <span>下载文件 ↓</span>
+          <a class="preview-download" id="preview-download" href="#" onclick="handleDownloadToast(event)">
+            <span id="preview-download-label">下载文件</span>
           </a>
           <button class="preview-close" id="preview-close" type="button" aria-label="关闭预览" onclick="closePreview()">✕</button>
         </div>
@@ -277,7 +282,7 @@
           <span class="notice-icon">ℹ️</span>
           <div>
             <strong>版本与正式调阅说明：</strong><br />
-            <span>本制度规章以公司正式发文与人事系统备案为准。如需纸质盖章文本、中英文对照本或历史归档文件调阅，请直接联系责任部门经办人。</span>
+            <span id="prof-notice">本资料以责任部门发布的现行版本为准。如需纸质盖章文本或历史归档文件，请联系责任部门。</span>
           </div>
         </div>
       </div>
@@ -329,19 +334,22 @@
       });
     }
 
-    function statusLabel(status) {
-      return status === "archived" ? "已归档" : "有效";
+    function downloadButton(item) {
+      if (item.file) {
+        return `<a class="icon-btn" href="${item.file}" download="${esc(item.fileName)}" title="下载文件" aria-label="下载 ${esc(item.title)}" onclick="event.stopPropagation(); triggerDownloadToast('${esc(item.title)}')">${down}</a>`;
+      }
+      return `<span class="download-slot" onclick="event.stopPropagation()"><button class="icon-btn is-disabled" type="button" disabled title="暂无可下载文件" aria-label="暂无可下载文件">${down}</button></span>`;
     }
 
     function renderQuick() {
       const items = RESOURCES.filter((item) => item.quickAccess);
       document.getElementById("quick-grid").innerHTML = items.map((item, index) => `
-        <button class="qa" type="button" data-preview="${item.id}" style="animation-delay:${index * 40}ms">
+        <article class="qa" tabindex="0" data-preview="${item.id}" style="animation-delay:${index * 40}ms">
           <div class="qa-top">
             <div class="qa-icon-wrap">
               <span class="format-icon ${item.format}">${item.format.toUpperCase()}</span>
             </div>
-            <span class="qa-arrow">↗</span>
+            ${downloadButton(item)}
           </div>
           <div class="qa-body">
             <b>${esc(item.title)}</b>
@@ -351,7 +359,7 @@
             <span>${esc(item.version)}</span>
             <span>${formatDate(item.updatedAt)}</span>
           </div>
-        </button>
+        </article>
       `).join("");
     }
 
@@ -380,8 +388,8 @@
         empty.style.display = "block";
         const publishedInCategory = RESOURCES.some((item) => (state.category === "all" || item.category === state.category) && item.status === "published");
         document.getElementById("empty-text").textContent = publishedInCategory
-          ? "可尝试精简搜索关键词，或调整右侧的筛选条件。"
-          : "本分类暂无现行有效资料。如需查阅历史资料，可切换上方状态为「含已归档」。";
+          ? "可尝试精简搜索关键词，或调整筛选条件。"
+          : "本分类暂无现行资料。历史资料可在「更多筛选」中改为「含已归档」。";
         return;
       }
 
@@ -389,9 +397,6 @@
       empty.style.display = "none";
 
       list.innerHTML = items.map((item, index) => {
-        const download = item.file
-          ? `<a class="icon-btn" href="${item.file}" download="${esc(item.fileName)}" title="下载文件" onclick="event.stopPropagation(); triggerDownloadToast('${esc(item.title)}')">${down}</a>`
-          : "";
         return `
           <article class="doc-row" data-preview="${item.id}" style="animation-delay:${Math.min(index, 10) * 30}ms">
             <span class="badge-micro ${item.format}">${item.format.toUpperCase()}</span>
@@ -399,21 +404,19 @@
               <div class="doc-title">
                 ${item.featured ? '<span class="pin">置顶</span>' : ""}
                 <button class="title-btn" type="button">${esc(item.title)}</button>
+                <span class="doc-version">${esc(item.version)}</span>
+                ${item.status === "archived" ? '<span class="status-pill archived">已归档</span>' : ""}
               </div>
               <p class="doc-summary">${esc(item.summary)}</p>
             </div>
             <span class="cell">${esc(item.docType)}</span>
             <span class="cell"><span class="topic-tag">${esc(item.topic)}</span></span>
             <span class="cell">${esc(item.audience)}</span>
-            <span class="ver-meta">
-              <span class="ver-number">${esc(item.version)}</span>
-              <span class="status-pill ${item.status === 'archived' ? 'archived' : ''}">${statusLabel(item.status)}</span>
-            </span>
             <span class="cell">${formatDate(item.updatedAt)}</span>
             <span class="cell">${esc(item.owner)}</span>
             <span class="actions">
               <button class="icon-btn" type="button" title="在线预览">${eye}</button>
-              ${download}
+              ${downloadButton(item)}
             </span>
           </article>`;
       }).join("");
@@ -435,6 +438,8 @@
         btn.classList.toggle("active", btn.dataset.category === state.category);
       });
       renderList();
+      const advanced = state.status !== "published" || state.audience || state.owner || state.docType;
+      document.getElementById("more-btn").classList.toggle("is-active", advanced);
       rememberCategory();
     }
 
@@ -459,27 +464,31 @@
       const topicTag = document.getElementById("preview-topic");
 
       document.getElementById("preview-title").textContent = item.title;
+      document.getElementById("preview-version").textContent = item.version;
       badge.textContent = item.format.toUpperCase();
       badge.className = `badge-micro ${item.format}`;
-      statusPill.textContent = statusLabel(item.status);
-      statusPill.className = `status-pill ${item.status === 'archived' ? 'archived' : ''}`;
+      statusPill.hidden = item.status !== "archived";
       topicTag.textContent = item.topic;
 
+      const downloadLabel = document.getElementById("preview-download-label");
       if (item.file) {
-        // Document with real downloadable/viewable PDF
         frame.hidden = false;
         frame.src = item.file;
         profile.hidden = true;
-        download.hidden = false;
+        download.classList.remove("is-disabled");
+        download.removeAttribute("aria-disabled");
         download.href = item.file;
         download.setAttribute("download", item.fileName);
-        download.innerHTML = `<span>下载 PDF (${item.version}，${formatSize(item.fileSize)}) ↓</span>`;
+        downloadLabel.textContent = `下载 ${item.format.toUpperCase()}（${item.version}，${formatSize(item.fileSize)}）`;
       } else {
-        // Document without file attachment -> Show rich profile
         frame.hidden = true;
         frame.removeAttribute("src");
         profile.hidden = false;
-        download.hidden = true;
+        download.classList.add("is-disabled");
+        download.setAttribute("aria-disabled", "true");
+        download.removeAttribute("href");
+        download.removeAttribute("download");
+        downloadLabel.textContent = "暂无可下载";
 
         document.getElementById("prof-title").textContent = item.title;
         document.getElementById("prof-summary").textContent = item.summary;
@@ -490,6 +499,9 @@
         document.getElementById("prof-owner").textContent = item.owner;
         document.getElementById("prof-support").textContent = item.support;
         document.getElementById("prof-type").textContent = item.docType;
+        document.getElementById("prof-notice").textContent = item.status === "archived"
+          ? "本资料已归档，不再作为现行要求。请以责任部门发布的最新版本为准。"
+          : "本资料以责任部门发布的现行版本为准。如需纸质盖章文本或历史归档文件，请联系责任部门。";
 
         const outlineList = document.getElementById("prof-outline");
         if (item.outline && item.outline.length) {
@@ -520,10 +532,12 @@
       history.replaceState(null, "", url);
     }
 
-    function handleDownloadToast(e) {
-      if (currentPreviewItem) {
-        triggerDownloadToast(currentPreviewItem.title);
+    function handleDownloadToast(event) {
+      if (!currentPreviewItem?.file) {
+        event.preventDefault();
+        return;
       }
+      triggerDownloadToast(currentPreviewItem.title);
     }
 
     function triggerDownloadToast(name) {
@@ -566,10 +580,7 @@
       document.getElementById("audience").value = "";
       document.getElementById("owner").value = "";
       document.getElementById("doc-type").value = "";
-
-      document.querySelectorAll("#statusSegment .segment-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.status === "published");
-      });
+      document.getElementById("status").value = "published";
 
       render();
     }
@@ -606,16 +617,6 @@
         render();
       });
 
-      // Status Segment
-      document.getElementById("statusSegment").addEventListener("click", (event) => {
-        const btn = event.target.closest(".segment-btn");
-        if (!btn) return;
-        document.querySelectorAll("#statusSegment .segment-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        state.status = btn.dataset.status;
-        render();
-      });
-
       // Quick Search
       const qInput = document.getElementById("q");
       const clearBtn = document.getElementById("clear-q");
@@ -645,6 +646,10 @@
         state.docType = event.target.value;
         render();
       });
+      document.getElementById("status").addEventListener("change", (event) => {
+        state.status = event.target.value;
+        render();
+      });
 
       // More Filters Button
       document.getElementById("more-btn").addEventListener("click", () => {
@@ -658,13 +663,22 @@
 
       // Card & Row Click delegation for Preview
       document.getElementById("quick-grid").addEventListener("click", (event) => {
+        if (event.target.closest("a[download], .download-slot")) return;
         const card = event.target.closest("[data-preview]");
         if (!card) return;
         openPreview(card.dataset.preview);
       });
+      document.getElementById("quick-grid").addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        if (event.target.closest("a[download], .download-slot, button")) return;
+        const card = event.target.closest(".qa");
+        if (!card) return;
+        event.preventDefault();
+        openPreview(card.dataset.preview);
+      });
 
       document.getElementById("list").addEventListener("click", (event) => {
-        if (event.target.closest("a[download]")) return;
+        if (event.target.closest("a[download], .download-slot")) return;
         const row = event.target.closest("[data-preview]");
         if (!row) return;
         openPreview(row.dataset.preview);
