@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440" />
+  <title>应用中心 · 企业员工门户</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --body: #334155;
+      --muted: #64748b;
+      --faint: #94a3b8;
+      --line: #e2e8f0;
+      --line-subtle: #f1f5f9;
+      --blue: #2563eb;
+      --blue-hover: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --blue-soft-border: #bfdbfe;
+      --emerald: #059669;
+      --emerald-soft: #ecfdf5;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --purple: #7c3aed;
+      --purple-soft: #f5f3ff;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+      --shadow-lg: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #eef2f6;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    .frame {
+      width: 1440px;
+      margin: 0 auto;
+      background: var(--bg);
+      min-height: 100vh;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      height: 72px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 40px;
+      column-gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .logo {
+      justify-self: start;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.2s var(--ease-out);
+    }
+    .logo:active { transform: scale(0.98); }
+
+    .mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--ink);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      justify-self: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--body);
+      font-size: 14px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      font-weight: 500;
+      transition: all 0.18s var(--ease-out);
+    }
+    nav a:hover {
+      color: var(--ink);
+      background: #f1f5f9;
+    }
+    nav a.active {
+      color: var(--blue);
+      font-weight: 600;
+      background: var(--blue-soft);
+    }
+
+    .header-tools {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cmdk-btn {
+      height: 38px;
+      min-width: 240px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-out);
+    }
+    .cmdk-btn:hover {
+      border-color: #cbd5e1;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .cmdk-btn kbd {
+      margin-left: auto;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 11px;
+      color: var(--muted);
+      font-family: inherit;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .logout {
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--body);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.18s var(--ease-out);
+    }
+    .logout:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: var(--ink);
+    }
+
+    /* Main Container */
+    main {
+      width: 1200px;
+      margin: 0 auto;
+      padding: 28px 0 60px;
+      flex: 1;
+    }
+
+    /* Breadcrumbs & Title Section */
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .breadcrumbs a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .breadcrumbs a:hover { color: var(--blue); }
+    .breadcrumbs span.sep { color: var(--faint); font-size: 11px; }
+    .breadcrumbs span.cur { color: var(--ink); font-weight: 500; }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+    }
+    .header-title-group h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .header-title-group p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .stat-pill strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .stat-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    /* Pinned / Favorites Section */
+    .favorites-shelf {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.25s var(--ease-out);
+    }
+    .shelf-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .shelf-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--ink);
+    }
+    .shelf-title .star-badge {
+      color: #f59e0b;
+      font-size: 14px;
+    }
+    .shelf-tip {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      width: 100%;
+    }
+    .fav-item {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: all 0.2s var(--ease-out);
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .fav-item:hover {
+      background: #fff;
+      border-color: var(--blue-soft-border);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .fav-item:active { transform: scale(0.97); }
+    .fav-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .fav-meta {
+      overflow: hidden;
+      flex: 1;
+      min-width: 0;
+    }
+    .fav-meta b {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .fav-meta span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .fav-remove {
+      opacity: 0;
+      background: transparent;
+      border: none;
+      color: var(--faint);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+    .fav-item:hover .fav-remove { opacity: 1; }
+    .fav-remove:hover { color: #ef4444; background: #fee2e2; }
+
+    /* Controls Bar: Chips + Search + View Filters */
+    .controls-panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Top Row: Category Chips (LogiLink Reference) */
+    .category-scroll-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .chips-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 2px 0;
+      width: 100%;
+    }
+    .chips-group::-webkit-scrollbar { display: none; }
+
+    .chip-btn {
+      appearance: none;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: var(--body);
+      font-size: 13.5px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s var(--ease-out);
+      user-select: none;
+    }
+    .chip-btn:hover {
+      background: #f1f5f9;
+      color: var(--ink);
+      border-color: #cbd5e1;
+    }
+    .chip-btn:active {
+      transform: scale(0.96);
+    }
+    .chip-btn.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+    }
+    .chip-count {
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--muted);
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .chip-btn.active .chip-count {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+
+    /* Bottom Row: In-page Instant Search + Type Filters + Layout Toggle */
+    .filter-tools-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line-subtle);
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 440px;
+    }
+    .search-box input {
+      width: 100%;
+      height: 40px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 0 36px 0 38px;
+      font-size: 13.5px;
+      color: var(--ink);
+      outline: none;
+      transition: all 0.2s var(--ease-out);
+    }
+    .search-box input:focus {
+      background: #fff;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .search-box input::placeholder { color: var(--faint); }
+    .search-icon-left {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--faint);
+      font-size: 15px;
+      pointer-events: none;
+    }
+    .search-clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #e2e8f0;
+      border: none;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      color: var(--muted);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .search-clear-btn:hover { background: #cbd5e1; color: var(--ink); }
+
+    .sub-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Dropdown or Segmented Filters */
+    .segmented-control {
+      display: flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      gap: 2px;
+    }
+    .segment-btn {
+      appearance: none;
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.18s var(--ease-out);
+    }
+    .segment-btn.active {
+      background: #fff;
+      color: var(--ink);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    .segment-btn:hover:not(.active) { color: var(--ink); }
+
+    .view-mode-toggle {
+      display: flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      gap: 2px;
+    }
+    .view-btn {
+      background: transparent;
+      border: none;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .view-btn.active {
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Apps Matrix Section */
+    .matrix-section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 0 14px;
+    }
+    .matrix-section-title h2 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .results-count {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* App Grid Matrix (4 Columns) */
+    .apps-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      transition: all 0.25s var(--ease-out);
+    }
+    .apps-matrix-grid.layout-compact {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .apps-matrix-grid.layout-list {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    /* Standardized Card (LogiLink + Arounda Aesthetic) */
+    .app-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s var(--ease-out),
+                  box-shadow 0.2s var(--ease-out),
+                  border-color 0.2s var(--ease-out),
+                  background-color 0.2s var(--ease-out);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: #cbd5e1;
+    }
+    .app-card:active {
+      transform: scale(0.985) translateY(-1px);
+    }
+
+    /* Card Top Bar */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .icon-container {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 3px 8px rgba(15, 23, 42, 0.08);
+      transition: transform 0.25s var(--ease-spring);
+    }
+    .app-card:hover .icon-container {
+      transform: scale(1.06);
+    }
+
+    .card-actions-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .star-btn {
+      background: transparent;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      color: #cbd5e1;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.18s var(--ease-out);
+    }
+    .star-btn:hover {
+      background: #f1f5f9;
+      color: #f59e0b;
+      transform: scale(1.15);
+    }
+    .star-btn.starred {
+      color: #f59e0b;
+    }
+    .star-btn.starred:hover {
+      transform: scale(1.2) rotate(8deg);
+    }
+
+    .ext-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: var(--faint);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      transition: all 0.2s var(--ease-out);
+    }
+    .app-card:hover .ext-badge {
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-color: var(--blue-soft-border);
+      transform: translate(2px, -2px);
+    }
+
+    /* Card Middle */
+    .card-body {
+      margin-bottom: 14px;
+    }
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .card-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--ink);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    .card-desc {
+      margin: 0;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Card Footer / Badges & Operations */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line-subtle);
+    }
+
+    .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-tag {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 500;
+      line-height: 1.4;
+      background: #f1f5f9;
+      color: var(--body);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .pill-tag.network-vpn {
+      background: #fffbeb;
+      color: #b45309;
+      border-color: #fde68a;
+    }
+    .pill-tag.network-free {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+    .pill-tag.tool-platform {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #ddd6fe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 10px;
+    }
+
+    .card-action-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      transition: gap 0.15s ease;
+    }
+    .app-card:hover .card-action-link {
+      gap: 5px;
+      color: var(--blue-hover);
+    }
+
+    /* Tool Card Specific UI */
+    .app-card.tool-card {
+      border-left: 3px solid #6366f1;
+    }
+    .tool-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .tool-meta-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tool-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-tool-sub {
+      background: #f1f5f9;
+      border: 1px solid var(--line);
+      color: var(--body);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-tool-sub:hover {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+    .btn-tool-main {
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s var(--ease-out);
+    }
+    .btn-tool-main:hover {
+      background: #4338ca;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+    }
+    .btn-tool-main:active { transform: scale(0.96); }
+
+    /* Empty State */
+    .empty-state {
+      display: none;
+      grid-column: 1 / -1;
+      padding: 56px 20px;
+      text-align: center;
+      background: #fff;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius-xl);
+      margin-top: 10px;
+    }
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+    .empty-title {
+      font-size: 16px;
+      font-weight: 650;
+      color: var(--ink);
+      margin: 0 0 6px;
+    }
+    .empty-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+    .btn-reset-filters {
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s var(--ease-out);
+    }
+    .btn-reset-filters:hover {
+      background: var(--body);
+      transform: translateY(-1px);
+    }
+
+    /* Modal / Drawer for Tool Install Instructions */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s var(--ease-out);
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-dialog {
+      width: 620px;
+      max-width: 92vw;
+      background: #fff;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 40px -8px rgba(15, 23, 42, 0.25);
+      border: 1px solid var(--line);
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.24s var(--ease-spring);
+      overflow: hidden;
+    }
+    .modal-backdrop.open .modal-dialog {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fafafa;
+    }
+    .modal-head h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      color: var(--muted);
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      transition: all 0.15s ease;
+    }
+    .modal-close:hover {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+
+    .modal-body {
+      padding: 24px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .tool-detail-banner {
+      display: flex;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .tool-detail-meta { flex: 1; }
+    .tool-detail-meta h4 { margin: 0 0 4px; font-size: 15px; font-weight: 650; }
+    .tool-detail-meta p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
+    .tool-tags-line { display: flex; gap: 8px; font-size: 11px; }
+
+    .modal-section-title {
+      font-size: 13.5px;
+      font-weight: 650;
+      color: var(--ink);
+      margin: 16px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-verify-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .code-verify-box code {
+      color: #38bdf8;
+      word-break: break-all;
+    }
+    .btn-copy-code {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .btn-copy-code:hover { background: rgba(255, 255, 255, 0.25); }
+    .btn-copy-code.copied { background: #10b981; }
+
+    .install-steps-list {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 13px;
+      color: var(--body);
+      line-height: 1.7;
+    }
+    .install-steps-list li { margin-bottom: 6px; }
+
+    .support-contact-box {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      color: #1e40af;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      background: #fafafa;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Toast Notification (Sonner-style) */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast {
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+      transition: all 0.25s var(--ease-spring);
+      pointer-events: auto;
+    }
+    .toast.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* Global Footer */
+    footer {
+      border-top: 1px solid var(--line);
+      background: #fff;
+      padding: 24px 40px;
+      margin-top: auto;
+    }
+    .footer-inner {
+      width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 18px;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .footer-links a:hover { color: var(--ink); }
+
+    /* Keyframes for Stagger Animations */
+    @keyframes cardFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-card {
+      animation: cardFadeIn 0.3s var(--ease-out) backwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <!-- Header -->
+    <header>
+      <a class="logo" href="homepage-mockup.html">
+        <span class="mark">门</span>
+        企业员工门户
+      </a>
+      <nav>
+        <a href="homepage-mockup.html">首页</a>
+        <a class="active" href="apps.html">应用中心</a>
+        <a href="resources.html">制度与资料</a>
+        <a href="products.html">产品与业务</a>
+        <a href="onboarding.html">入职指南</a>
+        <a href="news.html">新闻公告</a>
+        <a href="help.html">帮助支持</a>
+      </nav>
+      <div class="header-tools">
+        <div class="cmdk-btn" onclick="document.getElementById('quickAppSearch').focus()">
+          <span>全局搜索应用、制度…</span>
+          <kbd>⌘K</kbd>
+        </div>
+        <a class="logout" href="index.html">退出</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- Page Header & Stats -->
+      <section class="page-header">
+        <div class="breadcrumbs">
+          <a href="homepage-mockup.html">首页</a>
+          <span class="sep">/</span>
+          <span class="cur">应用中心</span>
+        </div>
+        <div class="header-row">
+          <div class="header-title-group">
+            <h1>应用中心</h1>
+            <p>汇聚企业日常办公协同、人事行政、财务采购与核心业务系统，提供一站式高效工作入口</p>
+          </div>
+          <div class="header-stats">
+            <div class="stat-pill">
+              <span class="stat-dot"></span>
+              <span>已收录系统 <strong id="totalAppCount">28</strong> 款</span>
+            </div>
+            <div class="stat-pill">
+              <span>状态 <strong>全员可用</strong></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Favorites / Pinned Shelf -->
+      <section class="favorites-shelf" id="favShelf">
+        <div class="shelf-head">
+          <div class="shelf-title">
+            <span class="star-badge">★</span>
+            <span>常用应用快捷栏</span>
+            <span class="chip-count" id="favCount">6</span>
+          </div>
+          <span class="shelf-tip">点击卡片右上角星标 ★ 即可自定义置顶常用系统</span>
+        </div>
+        <div class="shelf-grid" id="favGrid">
+          <!-- Favorite items injected by JS -->
+        </div>
+      </section>
+
+      <!-- Controls Panel (Chips + Live Search + Filters) -->
+      <section class="controls-panel">
+        <!-- Category Chips (LogiLink Inspired) -->
+        <div class="category-scroll-container">
+          <div class="chips-group" id="categoryChips">
+            <button class="chip-btn active" data-category="all">
+              <span>全部</span>
+              <span class="chip-count" id="count-all">28</span>
+            </button>
+            <button class="chip-btn" data-category="starred">
+              <span>⭐ 已收藏</span>
+              <span class="chip-count" id="count-starred">6</span>
+            </button>
+            <button class="chip-btn" data-category="collab">
+              <span>办公协同</span>
+              <span class="chip-count" id="count-collab">6</span>
+            </button>
+            <button class="chip-btn" data-category="hr">
+              <span>人事行政</span>
+              <span class="chip-count" id="count-hr">5</span>
+            </button>
+            <button class="chip-btn" data-category="finance">
+              <span>财务采购</span>
+              <span class="chip-count" id="count-finance">5</span>
+            </button>
+            <button class="chip-btn" data-category="business">
+              <span>业务系统</span>
+              <span class="chip-count" id="count-business">4</span>
+            </button>
+            <button class="chip-btn" data-category="dev">
+              <span>研发工具</span>
+              <span class="chip-count" id="count-dev">5</span>
+            </button>
+            <button class="chip-btn" data-category="infra">
+              <span>基础设施与安全</span>
+              <span class="chip-count" id="count-infra">3</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Tools Row -->
+        <div class="filter-tools-row">
+          <div class="search-box">
+            <span class="search-icon-left">🔍</span>
+            <input
+              type="text"
+              id="quickAppSearch"
+              placeholder="快速过滤应用名称、拼音首字母或功能用途…"
+              autocomplete="off"
+            />
+            <button class="search-clear-btn" id="searchClearBtn" title="清空搜索">✕</button>
+          </div>
+
+          <div class="sub-filter-group">
+            <!-- Type segment -->
+            <div class="segmented-control" id="typeSegment">
+              <button class="segment-btn active" data-type="all">全部类型</button>
+              <button class="segment-btn" data-type="web">Web直达</button>
+              <button class="segment-btn" data-type="tool">客户端工具</button>
+            </div>
+
+            <!-- Layout toggle -->
+            <div class="view-mode-toggle" id="viewToggle">
+              <button class="view-btn active" data-layout="grid" title="舒适网格">⊞</button>
+              <button class="view-btn" data-layout="compact" title="高密网格">▦</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Apps Matrix -->
+      <section>
+        <div class="matrix-section-title">
+          <h2 id="currentCategoryTitle">全部应用与工具</h2>
+          <span class="results-count" id="showingCountText">显示 28 个应用</span>
+        </div>
+
+        <div class="apps-matrix-grid" id="appsGrid">
+          <!-- App cards will be dynamically rendered & filtered here -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🔎</div>
+          <h3 class="empty-title">未找到匹配的应用或工具</h3>
+          <p class="empty-desc">请尝试调整搜索关键词，或切换到“全部”分类查看所有可用系统。</p>
+          <button class="btn-reset-filters" onclick="resetFilters()">清空搜索与筛选</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div>© 2026 企业数字化办公门户 · 信息技术部与人力行政部联合运维</div>
+        <div class="footer-links">
+          <a href="help.html">IT 运维支持 (分机: 8888)</a>
+          <a href="help.html#feedback">门户需求与体验反馈</a>
+          <a href="resources.html">信息安全合规说明</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal / Drawer for Tool Install Instructions -->
+  <div class="modal-backdrop" id="toolModal" onclick="closeToolModal(event)">
+    <div class="modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <h3 id="modalToolTitle">
+          <span>🛠️</span>
+          <span id="modalToolName">企业 VPN 安全网关客户端</span>
+        </h3>
+        <button class="modal-close" onclick="closeToolModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="tool-detail-banner">
+          <div class="icon-container" id="modalToolIcon" style="background: #4f46e5; width:44px; height:44px;">VPN</div>
+          <div class="tool-detail-meta">
+            <h4 id="modalToolSubname">版本 v3.8.2 (稳定版) · 64.2 MB</h4>
+            <p id="modalToolDesc">支持 Windows 10/11 与 macOS Apple Silicon / Intel 芯片架构。</p>
+            <div class="tool-tags-line">
+              <span class="pill-tag tool-platform" id="modalToolPlatform">Win / Mac / Linux</span>
+              <span class="pill-tag" id="modalToolDept">维护部门：信息技术部-网络安全组</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section-title">
+          <span>🔐</span> 文件完整性校验值 (SHA-256)
+        </div>
+        <div class="code-verify-box">
+          <code id="modalToolSha">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code>
+          <button class="btn-copy-code" id="btnCopySha" onclick="copyChecksum()">复制校验码</button>
+        </div>
+
+        <div class="modal-section-title">
+          <span>📖</span> 标准安装与首次配置指南
+        </div>
+        <ol class="install-steps-list">
+          <li>下载安装包后双击运行安装向导，按默认路径完成程序安装；</li>
+          <li>首次启动将提示导入企业根证书，请点击“信任并继续”；</li>
+          <li>在服务器地址栏填入内网接入网关地址：<code>vpn.company.internal</code>；</li>
+          <li>使用企业统一邮箱与 SSO 动态令牌（或企业微信扫码）完成双因子认证登录。</li>
+        </ol>
+
+        <div class="support-contact-box">
+          <div>
+            <strong>遇到安装报错或证书异常？</strong><br />
+            <span>联系 IT 桌面服务台：内线 <strong>8008</strong> / 邮件 <code>it-support@company.internal</code></span>
+          </div>
+          <a class="btn-tool-sub" href="help.html" style="text-decoration:none;">查看知识库</a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-tool-sub" onclick="closeToolModal()">关闭</button>
+        <button class="btn-tool-main" onclick="triggerMockDownload()">
+          <span>立即下载安装包 ↓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Element -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Application Data Source based on PRD requirements
+    const APPS_DATA = [
+      // 1. 办公协同 (collab)
+      {
+        id: "oa",
+        name: "OA 协同办公平台",
+        desc: "日常行政审批、公文流转、用印转签与综合日程协同",
+        category: "collab",
+        categoryName: "办公协同",
+        type: "web",
+        icon: "OA",
+        iconBg: "#4f46e5",
+        url: "https://oa.internal.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: true
+      },
+      {
+        id: "mail",
+        name: "企业邮箱系统",
+        desc: "内部及外部业务邮件安全收发、群组通讯录与日历同步",
+        category: "collab",
+        categoryName: "办公协同",
+        type: "web",
+        icon: "邮",
+        iconBg: "#059669",
+        url: "https://mail.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: true
+      },
+      {
+        id: "docs",
+        name: "在线企业文档中心",
+        desc: "团队在线协同文档、云端表格、多维知识库与历史版本追溯",
+        category: "collab",
+        categoryName: "办公协同",
+        type: "web",
+        icon: "文",
+        iconBg: "#2563eb",
+        url: "https://docs.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: true
+      },
+      {
+        id: "meeting",
+        name: "智能云会议",
+        desc: "高清远程视频会议、会议室预订看板与无线投屏中枢",
+        category: "collab",
+        categoryName: "办公协同",
+        type: "web",
+        icon: "会",
+        iconBg: "#0284c7",
+        url: "https://meeting.company.com",
+        network: "free",
+        networkLabel: "外网直连",
+        defaultStarred: false
+      },
+      {
+        id: "drive",
+        name: "企业云盘 Drive",
+        desc: "大文件高速传输存储、跨部门资产共享与权限隔离网盘",
+        category: "collab",
+        categoryName: "办公协同",
+        type: "web",
+        icon: "盘",
+        iconBg: "#7c3aed",
+        url: "https://drive.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: false
+      },
+      {
+        id: "esign",
+        name: "电子合同签约平台",
+        desc: "符合电子签名法的法律效力印章、合同在线发起与催办签署",
+        category: "collab",
+        categoryName: "办公协同",
+        type: "web",
+        icon: "签",
+        iconBg: "#d97706",
+        url: "https://esign.company.com",
+        network: "free",
+        networkLabel: "需认证开通",
+        defaultStarred: false
+      },
+
+      // 2. 人事行政 (hr)
+      {
+        id: "hr-self",
+        name: "HR 人事自助平台",
+        desc: "电子工资单查询、在职证明一键开具、个人档案与福利积分",
+        category: "hr",
+        categoryName: "人事行政",
+        type: "web",
+        icon: "HR",
+        iconBg: "#ea580c",
+        url: "https://hr.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: true
+      },
+      {
+        id: "attendance",
+        name: "考勤与假勤管理",
+        desc: "请假报备、年假余额核算、加班打卡记录与补卡申请流程",
+        category: "hr",
+        categoryName: "人事行政",
+        type: "web",
+        icon: "勤",
+        iconBg: "#0d9488",
+        url: "https://time.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: false
+      },
+      {
+        id: "travel",
+        name: "企业商旅订购系统",
+        desc: "免垫资差旅机票酒店火车预订、差标合规管控与自动对账",
+        category: "hr",
+        categoryName: "人事行政",
+        type: "web",
+        icon: "旅",
+        iconBg: "#0891b2",
+        url: "https://travel.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: false
+      },
+      {
+        id: "assets",
+        name: "固定资产与办公领用",
+        desc: "办公电脑领用申请、外设耗材申领、名片印刷与资产盘点",
+        category: "hr",
+        categoryName: "人事行政",
+        type: "web",
+        icon: "物",
+        iconBg: "#475569",
+        url: "https://asset.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: false
+      },
+      {
+        id: "visitor",
+        name: "访客与园区门禁系统",
+        desc: "外部访客预约登记、临时车牌报备与园区蓝牙门禁授权",
+        category: "hr",
+        categoryName: "人事行政",
+        type: "web",
+        icon: "门",
+        iconBg: "#64748b",
+        url: "https://pass.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: false
+      },
+
+      // 3. 财务采购 (finance)
+      {
+        id: "expense",
+        name: "财务费控与报销系统",
+        desc: "日常发票拍照识别、差旅报销单填报、审批进度与打款明细",
+        category: "finance",
+        categoryName: "财务采购",
+        type: "web",
+        icon: "财",
+        iconBg: "#9333ea",
+        url: "https://fssc.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: true
+      },
+      {
+        id: "invoice",
+        name: "发票查验与真伪查重",
+        desc: "增值税发票国税局官方查验通道、电子发票原件去重防篡改",
+        category: "finance",
+        categoryName: "财务采购",
+        type: "web",
+        icon: "票",
+        iconBg: "#16a34a",
+        url: "https://invoice.company.com",
+        network: "free",
+        networkLabel: "全员可用",
+        defaultStarred: false
+      },
+      {
+        id: "procure",
+        name: "阳光采购商城",
+        desc: "企业协议供货商直通采购、办公硬件选型下单与部门对公结算",
+        category: "finance",
+        categoryName: "财务采购",
+        type: "web",
+        icon: "采",
+        iconBg: "#c026d3",
+        url: "https://mall.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: false
+      },
+      {
+        id: "contract-pay",
+        name: "合同付款与资金结算",
+        desc: "供应商合同付款申请、银企直联转账凭证与应付台账跟踪",
+        category: "finance",
+        categoryName: "财务采购",
+        type: "web",
+        icon: "结",
+        iconBg: "#8b5cf6",
+        url: "https://pay.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: false
+      },
+      {
+        id: "budget",
+        name: "预算管理与费控看板",
+        desc: "各部门年度经营预算执行率监控、费用科目超限预警分析",
+        category: "finance",
+        categoryName: "财务采购",
+        type: "web",
+        icon: "预",
+        iconBg: "#4338ca",
+        url: "https://budget.company.com",
+        network: "vpn",
+        networkLabel: "限财务/主管",
+        defaultStarred: false
+      },
+
+      // 4. 业务系统 (business)
+      {
+        id: "crm",
+        name: "CRM 客户关系管理",
+        desc: "商机全生命周期跟进、客户线索池划拨、合同回款与拜访记录",
+        category: "business",
+        categoryName: "业务系统",
+        type: "web",
+        icon: "客",
+        iconBg: "#dc2626",
+        url: "https://crm.company.com",
+        network: "vpn",
+        networkLabel: "需业务权限",
+        defaultStarred: false
+      },
+      {
+        id: "erp",
+        name: "ERP 供应链与生产中枢",
+        desc: "订单调度、生产排产计划、进销存出入库核算与物料清单",
+        category: "business",
+        categoryName: "业务系统",
+        type: "web",
+        icon: "产",
+        iconBg: "#b91c1c",
+        url: "https://erp.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: false
+      },
+      {
+        id: "bi-dash",
+        name: "企业经营 BI 数据驾驶舱",
+        desc: "高管经营数据大屏、核心业务 KPI 指标看板与多维穿透分析",
+        category: "business",
+        categoryName: "业务系统",
+        type: "web",
+        icon: "BI",
+        iconBg: "#0369a1",
+        url: "https://bi.company.com",
+        network: "vpn",
+        networkLabel: "需主管授权",
+        defaultStarred: false
+      },
+      {
+        id: "cs-desk",
+        name: "全渠道客服工单中心",
+        desc: "用户工单流转分发、SLA服务时效监控与售后客户满意度评价",
+        category: "business",
+        categoryName: "业务系统",
+        type: "web",
+        icon: "服",
+        iconBg: "#059669",
+        url: "https://kf.company.com",
+        network: "free",
+        networkLabel: "需客服权限",
+        defaultStarred: false
+      },
+
+      // 5. 研发工具 (dev)
+      {
+        id: "gitlab",
+        name: "GitLab 企业代码仓库",
+        desc: "分布式源码托管、代码评审 Merge Request、分支保护与权限审计",
+        category: "dev",
+        categoryName: "研发工具",
+        type: "web",
+        icon: "Git",
+        iconBg: "#e11d48",
+        url: "https://gitlab.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: true
+      },
+      {
+        id: "jira",
+        name: "Jira 敏捷项目跟踪",
+        desc: "Scrum 敏捷冲刺看板、缺陷 Bug 跟踪、研发工时排期与版本发布",
+        category: "dev",
+        categoryName: "研发工具",
+        type: "web",
+        icon: "Jira",
+        iconBg: "#0284c7",
+        url: "https://jira.company.com",
+        network: "vpn",
+        networkLabel: "需研发权限",
+        defaultStarred: false
+      },
+      {
+        id: "confluence",
+        name: "Confluence 研发知识库",
+        desc: "产品需求 PRD 文档、系统架构设计方案、API 接口定义与变更记录",
+        category: "dev",
+        categoryName: "研发工具",
+        type: "web",
+        icon: "Wiki",
+        iconBg: "#1d4ed8",
+        url: "https://wiki.company.com",
+        network: "vpn",
+        networkLabel: "需内网/VPN",
+        defaultStarred: false
+      },
+      {
+        id: "cicd",
+        name: "CI/CD 持续交付流水线",
+        desc: "微服务自动化构建部署、灰度发布分流控制与容器镜像仓库",
+        category: "dev",
+        categoryName: "研发工具",
+        type: "web",
+        icon: "CI",
+        iconBg: "#6366f1",
+        url: "https://cicd.company.com",
+        network: "vpn",
+        networkLabel: "需研发权限",
+        defaultStarred: false
+      },
+      {
+        id: "grafana",
+        name: "Grafana 系统监控与告警",
+        desc: "服务器集群性能监控、应用链路追踪 APM、实时告警与日志分析",
+        category: "dev",
+        categoryName: "研发工具",
+        type: "web",
+        icon: "Graf",
+        iconBg: "#f97316",
+        url: "https://monitor.company.com",
+        network: "vpn",
+        networkLabel: "需研发权限",
+        defaultStarred: false
+      },
+
+      // 6. 基础设施与安全工具客户端 (infra / tool)
+      {
+        id: "tool-vpn",
+        name: "企业 VPN 安全接入客户端",
+        desc: "远程居家与差旅办公访问内部系统的必备安全加密接入网关",
+        category: "infra",
+        categoryName: "基础设施与安全",
+        type: "tool",
+        icon: "VPN",
+        iconBg: "#4f46e5",
+        version: "v3.8.2",
+        fileSize: "64.2 MB",
+        platform: "Win / Mac / Linux",
+        dept: "信息技术部-网络安全组",
+        sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        updateDate: "2026-10-10",
+        network: "free",
+        networkLabel: "工具安装包",
+        defaultStarred: true
+      },
+      {
+        id: "tool-jumpserver",
+        name: "堡垒机运维客户端 (JumpServer)",
+        desc: "生产环境服务器特权账号托管、SSH/RDP 运维审计连接客户端",
+        category: "infra",
+        categoryName: "基础设施与安全",
+        type: "tool",
+        icon: "堡",
+        iconBg: "#0f766e",
+        version: "v2.5.0",
+        fileSize: "48.6 MB",
+        platform: "Win / Mac",
+        dept: "信息技术部-系统运维组",
+        sha256: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+        updateDate: "2026-09-28",
+        network: "vpn",
+        networkLabel: "工具安装包",
+        defaultStarred: false
+      },
+      {
+        id: "tool-cert",
+        name: "企业安全根证书与环境配置助手",
+        desc: "一键导入企业内网 HTTPS 根证书、配置内网 DNS 解析与安全准入",
+        category: "infra",
+        categoryName: "基础设施与安全",
+        type: "tool",
+        icon: "证",
+        iconBg: "#0369a1",
+        version: "v1.4.1",
+        fileSize: "18.3 MB",
+        platform: "Win / Mac",
+        dept: "信息技术部-终端支持组",
+        sha256: "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+        updateDate: "2026-09-15",
+        network: "free",
+        networkLabel: "环境工具",
+        defaultStarred: false
+      }
+    ];
+
+    // State
+    let currentCategory = "all";
+    let currentType = "all";
+    let currentSearch = "";
+    let currentLayout = "grid";
+    let starredAppIds = new Set();
+
+    // Initialize Favorites from localStorage
+    function initFavorites() {
+      try {
+        const saved = localStorage.getItem("portal_starred_apps");
+        if (saved) {
+          starredAppIds = new Set(JSON.parse(saved));
+        } else {
+          // Default initial starred apps
+          APPS_DATA.filter(a => a.defaultStarred).forEach(a => starredAppIds.add(a.id));
+          saveFavorites();
+        }
+      } catch (e) {
+        APPS_DATA.filter(a => a.defaultStarred).forEach(a => starredAppIds.add(a.id));
+      }
+      updateCategoryCounts();
+      renderFavoritesShelf();
+    }
+
+    function saveFavorites() {
+      try {
+        localStorage.setItem("portal_starred_apps", JSON.stringify(Array.from(starredAppIds)));
+      } catch (e) {}
+    }
+
+    function toggleStar(appId, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const isStarred = starredAppIds.has(appId);
+      const app = APPS_DATA.find(a => a.id === appId);
+      if (isStarred) {
+        starredAppIds.delete(appId);
+        showToast(`已将「${app ? app.name : '应用'}」从常用快捷栏移除`);
+      } else {
+        starredAppIds.add(appId);
+        showToast(`已添加「${app ? app.name : '应用'}」至常用快捷栏 ⭐`);
+      }
+      saveFavorites();
+      updateCategoryCounts();
+      renderFavoritesShelf();
+      renderApps();
+    }
+
+    function updateCategoryCounts() {
+      const counts = {
+        all: APPS_DATA.length,
+        starred: starredAppIds.size,
+        collab: APPS_DATA.filter(a => a.category === "collab").length,
+        hr: APPS_DATA.filter(a => a.category === "hr").length,
+        finance: APPS_DATA.filter(a => a.category === "finance").length,
+        business: APPS_DATA.filter(a => a.category === "business").length,
+        dev: APPS_DATA.filter(a => a.category === "dev").length,
+        infra: APPS_DATA.filter(a => a.category === "infra").length,
+      };
+
+      for (const [key, val] of Object.entries(counts)) {
+        const el = document.getElementById(`count-${key}`);
+        if (el) el.textContent = val;
+      }
+      document.getElementById("totalAppCount").textContent = APPS_DATA.length;
+      document.getElementById("favCount").textContent = starredAppIds.size;
+    }
+
+    // Render Favorites Shelf
+    function renderFavoritesShelf() {
+      const shelf = document.getElementById("favShelf");
+      const grid = document.getElementById("favGrid");
+      const starredApps = APPS_DATA.filter(a => starredAppIds.has(a.id));
+
+      if (starredApps.length === 0) {
+        shelf.style.display = "none";
+        return;
+      }
+      shelf.style.display = "flex";
+
+      grid.innerHTML = starredApps.map(app => `
+        <a class="fav-item" href="${app.type === 'tool' ? 'javascript:void(0)' : app.url}" ${app.type === 'tool' ? `onclick="openToolModal('${app.id}')"` : 'target="_blank" rel="noopener"'}>
+          <div class="fav-icon" style="background: ${app.iconBg}">${app.icon}</div>
+          <div class="fav-meta">
+            <b>${app.name}</b>
+            <span>${app.categoryName}</span>
+          </div>
+          <button class="fav-remove" title="取消置顶" onclick="toggleStar('${app.id}', event)">✕</button>
+        </a>
+      `).join("");
+    }
+
+    // Filter Logic
+    function getFilteredApps() {
+      return APPS_DATA.filter(app => {
+        // Category filter
+        if (currentCategory === "starred") {
+          if (!starredAppIds.has(app.id)) return false;
+        } else if (currentCategory !== "all") {
+          if (app.category !== currentCategory) return false;
+        }
+
+        // Type filter
+        if (currentType !== "all" && app.type !== currentType) {
+          return false;
+        }
+
+        // Search filter
+        if (currentSearch) {
+          const q = currentSearch.toLowerCase();
+          const matchName = app.name.toLowerCase().includes(q);
+          const matchDesc = app.desc.toLowerCase().includes(q);
+          const matchCat = app.categoryName.toLowerCase().includes(q);
+          const matchIcon = app.icon.toLowerCase().includes(q);
+          if (!matchName && !matchDesc && !matchCat && !matchIcon) return false;
+        }
+
+        return true;
+      });
+    }
+
+    // Render App Matrix
+    function renderApps() {
+      const grid = document.getElementById("appsGrid");
+      const emptyState = document.getElementById("emptyState");
+      const filtered = getFilteredApps();
+
+      // Update titles
+      const categoryTitles = {
+        all: "全部应用与工具",
+        starred: "⭐ 我的常用与收藏应用",
+        collab: "办公协同平台",
+        hr: "人事行政服务",
+        finance: "财务与采购系统",
+        business: "核心业务系统",
+        dev: "研发与效能工具",
+        infra: "基础设施与安全终端"
+      };
+      document.getElementById("currentCategoryTitle").textContent = categoryTitles[currentCategory] || "应用列表";
+      document.getElementById("showingCountText").textContent = `显示 ${filtered.length} 个应用`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "";
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      grid.innerHTML = filtered.map((app, index) => {
+        const isStarred = starredAppIds.has(app.id);
+        const animDelay = (index % 12) * 0.03;
+
+        if (app.type === "tool") {
+          // Tool card template
+          return `
+            <div class="app-card tool-card animate-card" style="animation-delay: ${animDelay}s" onclick="openToolModal('${app.id}')">
+              <div>
+                <div class="card-top">
+                  <div class="icon-container" style="background: ${app.iconBg}">${app.icon}</div>
+                  <div class="card-actions-top">
+                    <button class="star-btn ${isStarred ? 'starred' : ''}" title="${isStarred ? '取消常用' : '设为常用'}" onclick="toggleStar('${app.id}', event)">★</button>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <div class="card-title-row">
+                    <h3 class="card-title">${app.name}</h3>
+                  </div>
+                  <p class="card-desc">${app.desc}</p>
+                </div>
+              </div>
+
+              <div>
+                <div class="tool-meta-row">
+                  <span>💻 ${app.platform}</span>
+                  <span>📦 ${app.version} · ${app.fileSize}</span>
+                </div>
+                <div class="card-footer" style="margin-top:8px;">
+                  <span class="pill-tag tool-platform">${app.dept.split('-')[1] || app.dept}</span>
+                  <div class="tool-btn-group">
+                    <button class="btn-tool-sub" onclick="event.stopPropagation(); openToolModal('${app.id}')">安装说明</button>
+                    <button class="btn-tool-main" onclick="event.stopPropagation(); triggerMockDownload('${app.name}')">下载 ↓</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        // Web Link Card Template
+        return `
+          <a class="app-card animate-card" style="animation-delay: ${animDelay}s" href="${app.url}" target="_blank" rel="noopener">
+            <div>
+              <div class="card-top">
+                <div class="icon-container" style="background: ${app.iconBg}">${app.icon}</div>
+                <div class="card-actions-top">
+                  <button class="star-btn ${isStarred ? 'starred' : ''}" title="${isStarred ? '取消常用' : '设为常用'}" onclick="toggleStar('${app.id}', event)">★</button>
+                  <div class="ext-badge">↗</div>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="card-title-row">
+                  <h3 class="card-title">${app.name}</h3>
+                </div>
+                <p class="card-desc">${app.desc}</p>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <div class="badge-group">
+                <span class="pill-tag">${app.categoryName}</span>
+                <span class="pill-tag ${app.network === 'vpn' ? 'network-vpn' : 'network-free'}">${app.networkLabel}</span>
+              </div>
+              <span class="card-action-link">打开应用 ↗</span>
+            </div>
+          </a>
+        `;
+      }).join("");
+    }
+
+    // Modal Operations
+    let currentModalTool = null;
+
+    function openToolModal(toolId) {
+      const tool = APPS_DATA.find(a => a.id === toolId);
+      if (!tool) return;
+      currentModalTool = tool;
+
+      document.getElementById("modalToolName").textContent = tool.name;
+      document.getElementById("modalToolSubname").textContent = `版本 ${tool.version} · 文件大小 ${tool.fileSize} · 更新于 ${tool.updateDate}`;
+      document.getElementById("modalToolDesc").textContent = tool.desc;
+      document.getElementById("modalToolPlatform").textContent = `适用系统: ${tool.platform}`;
+      document.getElementById("modalToolDept").textContent = `维护部门: ${tool.dept}`;
+      document.getElementById("modalToolSha").textContent = tool.sha256;
+      document.getElementById("modalToolIcon").textContent = tool.icon;
+      document.getElementById("modalToolIcon").style.background = tool.iconBg;
+
+      const btnCopy = document.getElementById("btnCopySha");
+      btnCopy.textContent = "复制校验码";
+      btnCopy.classList.remove("copied");
+
+      document.getElementById("toolModal").classList.add("open");
+    }
+
+    function closeToolModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById("toolModal").classList.remove("open");
+    }
+
+    function copyChecksum() {
+      if (!currentModalTool) return;
+      navigator.clipboard.writeText(currentModalTool.sha256).then(() => {
+        const btn = document.getElementById("btnCopySha");
+        btn.textContent = "已复制 ✓";
+        btn.classList.add("copied");
+        showToast("SHA-256 校验码已成功复制到剪贴板");
+        setTimeout(() => {
+          btn.textContent = "复制校验码";
+          btn.classList.remove("copied");
+        }, 2500);
+      }).catch(() => {
+        showToast("复制失败，请手动选中复制");
+      });
+    }
+
+    function triggerMockDownload(toolName) {
+      const name = toolName || (currentModalTool ? currentModalTool.name : "安装包");
+      showToast(`已开始下载安装包: ${name} … 📥`);
+      setTimeout(() => {
+        showToast(`下载完成: ${name}`);
+      }, 1800);
+    }
+
+    // Toast Notification System
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<span>💬</span> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      // Trigger animation
+      requestAnimationFrame(() => {
+        toast.classList.add("show");
+      });
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      }, 3000);
+    }
+
+    // Reset Filters
+    function resetFilters() {
+      currentCategory = "all";
+      currentType = "all";
+      currentSearch = "";
+      document.getElementById("quickAppSearch").value = "";
+      document.getElementById("searchClearBtn").style.display = "none";
+
+      // Reset Chips UI
+      document.querySelectorAll("#categoryChips .chip-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.category === "all");
+      });
+
+      // Reset Type UI
+      document.querySelectorAll("#typeSegment .segment-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.type === "all");
+      });
+
+      renderApps();
+    }
+
+    // Event Listeners
+    document.addEventListener("DOMContentLoaded", () => {
+      initFavorites();
+      renderApps();
+
+      // Category Chips Click
+      document.getElementById("categoryChips").addEventListener("click", e => {
+        const btn = e.target.closest(".chip-btn");
+        if (!btn) return;
+        document.querySelectorAll("#categoryChips .chip-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentCategory = btn.dataset.category;
+        renderApps();
+      });
+
+      // Type Segment Click
+      document.getElementById("typeSegment").addEventListener("click", e => {
+        const btn = e.target.closest(".segment-btn");
+        if (!btn) return;
+        document.querySelectorAll("#typeSegment .segment-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentType = btn.dataset.type;
+        renderApps();
+      });
+
+      // Layout Toggle
+      document.getElementById("viewToggle").addEventListener("click", e => {
+        const btn = e.target.closest(".view-btn");
+        if (!btn) return;
+        document.querySelectorAll("#viewToggle .view-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentLayout = btn.dataset.layout;
+        const grid = document.getElementById("appsGrid");
+        grid.className = `apps-matrix-grid ${currentLayout === 'compact' ? 'layout-compact' : ''}`;
+      });
+
+      // Instant Search Input
+      const searchInput = document.getElementById("quickAppSearch");
+      const clearBtn = document.getElementById("searchClearBtn");
+
+      searchInput.addEventListener("input", e => {
+        currentSearch = e.target.value.trim();
+        clearBtn.style.display = currentSearch ? "flex" : "none";
+        renderApps();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        currentSearch = "";
+        clearBtn.style.display = "none";
+        searchInput.focus();
+        renderApps();
+      });
+
+      // Keyboard Shortcut (⌘K or / to search, Escape to close modal)
+      document.addEventListener("keydown", e => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        } else if (e.key === "/" && document.activeElement !== searchInput) {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        } else if (e.key === "Escape") {
+          closeToolModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
