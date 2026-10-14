@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440" />
+  <title>企业员工门户 · 首页</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --body: #334155;
+      --muted: #64748b;
+      --faint: #94a3b8;
+      --line: #e2e8f0;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(15, 23, 42, 0.03);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #eef2f6;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    .frame {
+      width: 1440px;
+      margin: 0 auto;
+      background: var(--bg);
+      min-height: 100vh;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
+    }
+    header {
+      height: 72px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      gap: 32px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--body);
+      font-size: 14px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    nav a.active {
+      color: var(--blue);
+      font-weight: 600;
+      background: var(--blue-soft);
+    }
+    .cmdk {
+      height: 38px;
+      min-width: 230px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px 0 14px;
+      color: var(--faint);
+      font-size: 13px;
+    }
+    .cmdk kbd {
+      margin-left: auto;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 11px;
+      color: var(--muted);
+      font-family: inherit;
+    }
+    main {
+      width: 1200px;
+      margin: 0 auto;
+      padding: 36px 0 48px;
+    }
+    .hero { text-align: center; margin-bottom: 28px; }
+    .hello {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .date {
+      margin: 8px 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .search {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      height: 56px;
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+      display: flex;
+      align-items: center;
+      padding: 6px 6px 6px 20px;
+      gap: 12px;
+    }
+    .search span { color: #94a3b8; font-size: 15px; flex: 1; text-align: left; }
+    .search button {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .chips {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .chips span {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--body);
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 6px 14px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+    }
+    .section-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 28px 0 12px;
+    }
+    .section-label h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 650;
+    }
+    .section-label a, .more {
+      color: var(--blue);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    .app, .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+    .app {
+      padding: 14px 14px 12px;
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .app-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .ext { color: var(--faint); font-size: 14px; }
+    .app b { display: block; font-size: 14px; font-weight: 600; }
+    .app em { display: block; margin-top: 3px; font-style: normal; color: var(--muted); font-size: 12px; }
+
+    /* Bento Grid: Left and Right strictly aligned */
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 16px;
+      margin-top: 18px;
+      align-items: stretch; /* Both columns stretch to the same total height */
+    }
+    .left-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .card-head h2 { margin: 0; font-size: 16px; font-weight: 650; }
+
+    /* Notice Card */
+    .card-notices {
+      padding: 18px 20px 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .notices-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      flex: 1;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 86px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid #f1f5f9;
+    }
+    .row:first-of-type { border-top: 1px solid #f1f5f9; }
+    .row time { color: var(--muted); font-size: 13px; }
+    .row strong { font-size: 14px; font-weight: 550; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 2px 7px;
+      font-weight: 600;
+      vertical-align: 1px;
+    }
+    .tag.soft {
+      background: #eff6ff;
+      color: var(--blue);
+      font-weight: 500;
+    }
+
+    /* Quick Access Files: 4 horizontal items as in original mockup */
+    .card-files {
+      padding: 16px 20px 16px;
+    }
+    .files-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .file {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+    }
+    .badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .pdf { background: #fee2e2; color: #dc2626; }
+    .doc { background: #dbeafe; color: #2563eb; }
+    .xls { background: #e0e7ff; color: #4338ca; }
+    .file-meta { overflow: hidden; }
+    .file b { display: block; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Company Spotlight Card (Matches original mockup strictly) */
+    .card-spotlight {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .spot-cover-wrap {
+      width: 100%;
+      height: 195px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: #e2e8f0;
+    }
+    .spot-cover-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .spot-title {
+      margin: 16px 0 10px;
+      font-size: 17px;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .spot-link {
+      color: var(--blue);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* Onboarding Banner */
+    .banner {
+      margin-top: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .banner b { font-size: 15px; font-weight: 650; }
+    .banner p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .btn {
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <header>
+      <div class="logo"><span class="mark">门</span>企业员工门户</div>
+      <nav>
+        <a class="active" href="#">首页</a>
+        <a href="#">应用中心</a>
+        <a href="#">制度与资料</a>
+        <a href="#">产品与业务</a>
+        <a href="#">入职指南</a>
+        <a href="#">新闻公告</a>
+        <a href="#">帮助支持</a>
+      </nav>
+      <div class="cmdk">搜索应用、制度、模板… <kbd>⌘K</kbd></div>
+    </header>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero">
+        <h1 class="hello">早上好</h1>
+        <p class="date">2026年10月13日 · 星期二</p>
+        <div class="search">
+          <span>搜索应用、制度、模板、业务和常见问题…</span>
+          <button aria-label="搜索">⌕</button>
+        </div>
+        <div class="chips">
+          <span>报销审批</span>
+          <span>VPN设置</span>
+          <span>员工手册</span>
+          <span>考勤制度</span>
+        </div>
+      </section>
+
+      <!-- Apps Row -->
+      <div class="section-label">
+        <h2>常用应用</h2>
+        <a href="#">进入应用中心</a>
+      </div>
+      <div class="apps">
+        <article class="app">
+          <div class="app-top"><div class="ico" style="background:#4f46e5">OA</div><span class="ext">↗</span></div>
+          <div><b>协同办公</b><em>审批、公告与日程</em></div>
+        </article>
+        <article class="app">
+          <div class="app-top"><div class="ico" style="background:#059669">邮</div><span class="ext">↗</span></div>
+          <div><b>企业邮箱</b><em>收发内部邮件</em></div>
+        </article>
+        <article class="app">
+          <div class="app-top"><div class="ico" style="background:#d97706">HR</div><span class="ext">↗</span></div>
+          <div><b>人事自助</b><em>假期、证明与档案</em></div>
+        </article>
+        <article class="app">
+          <div class="app-top"><div class="ico" style="background:#7c3aed">财</div><span class="ext">↗</span></div>
+          <div><b>财务报销</b><em>提交与查询报销</em></div>
+        </article>
+        <article class="app">
+          <div class="app-top"><div class="ico" style="background:#2563eb">文</div><span class="ext">↗</span></div>
+          <div><b>在线文档</b><em>共享文档与表格</em></div>
+        </article>
+        <article class="app">
+          <div class="app-top"><div class="ico" style="background:#0f766e">IT</div><span class="ext">↗</span></div>
+          <div><b>IT 服务台</b><em>账号、网络与设备</em></div>
+        </article>
+      </div>
+
+      <!-- Bento Grid: Left and Right strictly aligned in height -->
+      <div class="grid">
+        <!-- Left Stack: Notices + Quick Files -->
+        <div class="left-stack">
+          <!-- Notices -->
+          <section class="card card-notices">
+            <div class="card-head">
+              <h2>公告</h2>
+              <a class="more" href="#">查看全部</a>
+            </div>
+            <div class="notices-body">
+              <div class="row">
+                <time>10月13日</time>
+                <strong>国庆后办公网络维护窗口<span class="tag">置顶</span></strong>
+                <span class="tag soft">有效</span>
+              </div>
+              <div class="row">
+                <time>10月09日</time>
+                <strong>2026 年第四季度差旅报销截止说明</strong>
+                <span class="tag soft">有效</span>
+              </div>
+              <div class="row">
+                <time>09月28日</time>
+                <strong>信息安全规范修订，请在本月内完成阅读</strong>
+                <span class="tag soft">有效</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Access Files: 4 horizontal items strictly aligned -->
+          <section class="card card-files">
+            <div class="card-head">
+              <h2>常用制度与资料</h2>
+              <a class="more" href="#">查看全部</a>
+            </div>
+            <div class="files-row">
+              <div class="file">
+                <div class="badge pdf">PDF</div>
+                <div class="file-meta">
+                  <b>员工手册</b>
+                  <span>人力资源部 · v3.2</span>
+                </div>
+              </div>
+              <div class="file">
+                <div class="badge xls">XLSX</div>
+                <div class="file-meta">
+                  <b>报销模板</b>
+                  <span>财务部 · v1.8</span>
+                </div>
+              </div>
+              <div class="file">
+                <div class="badge doc">DOC</div>
+                <div class="file-meta">
+                  <b>差旅标准</b>
+                  <span>行政部 · v2.1</span>
+                </div>
+              </div>
+              <div class="file">
+                <div class="badge pdf">PDF</div>
+                <div class="file-meta">
+                  <b>品牌VI规范</b>
+                  <span>品牌设计组 · v1.0</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right: Company Spotlight (Strictly based on original mockup image) -->
+        <section class="card card-spotlight">
+          <div class="card-head">
+            <h2>新闻</h2>
+            <a class="more" href="#">查看全部</a>
+          </div>
+          <div class="spot-cover-wrap">
+            <img src="spotlight_cover_hd.jpg" alt="公司现代办公空间" />
+          </div>
+          <div class="spot-title">2026 全员协同新体验：静态企业门户正式上线</div>
+          <a class="spot-link" href="#">阅读详情 →</a>
+        </section>
+      </div>
+
+      <!-- Onboarding Banner -->
+      <section class="banner">
+        <div>
+          <b>刚入职？从这里开始</b>
+          <p>公司介绍、必读制度、系统与设备、常见问题，按顺序看完即可。</p>
+        </div>
+        <a class="btn" href="#">打开入职指南</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

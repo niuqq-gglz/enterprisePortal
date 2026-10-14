@@ -1,0 +1,7 @@
+{
+  "name": "enterprise-portal-prototype",
+  "private": true,
+  "scripts": {
+    "start": "node serve.js"
+  }
+}
