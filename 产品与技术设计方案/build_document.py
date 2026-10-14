@@ -265,10 +265,10 @@ html = f"""<!DOCTYPE html>
     <div>
       <div class="cover-eyebrow">产品与技术设计方案</div>
       <div class="cover-title">企业员工门户一期<br>产品与技术设计方案</div>
-      <div class="cover-sub">受控访问的静态员工信息与资源入口</div>
+      <div class="cover-sub">受控访问的员工信息与资源入口</div>
     </div>
     <div class="cover-meta">
-      <strong>版本 2.3</strong><br>
+      <strong>版本 2.4</strong><br>
       2026 年 10 月 14 日<br>
       适用于产品、设计、研发、运维、安全与内容负责人
     </div>
