@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440" />
+  <title>制度与资料 · 企业员工门户</title>
+  <link rel="stylesheet" href="resources.css" />
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要内容</a>
+  <div class="frame">
+    <!-- Header -->
+    <header>
+      <a class="logo" href="homepage-mockup.html">
+        <span class="mark">门</span>
+        企业员工门户
+      </a>
+      <nav>
+        <a href="homepage-mockup.html">首页</a>
+        <a href="apps.html">应用中心</a>
+        <a class="active" href="resources.html">制度与资料</a>
+        <a href="products.html">产品与业务</a>
+        <a href="onboarding.html">入职指南</a>
+        <a href="news.html">新闻公告</a>
+        <a href="help.html">帮助支持</a>
+      </nav>
+      <div class="header-tools">
+        <div class="cmdk" id="focus-search">
+          <span>搜索制度、流程、模板…</span>
+          <kbd>⌘K</kbd>
+        </div>
+        <a class="logout" href="index.html">退出</a>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main id="main">
+      <!-- Breadcrumbs & Header -->
+      <div class="crumbs">
+        <a href="homepage-mockup.html">首页</a>
+        <span class="sep">/</span>
+        <span class="cur">制度与资料</span>
+      </div>
+
+      <div class="page-head">
+        <div>
+          <h1>制度与资料中心</h1>
+          <p>查阅公司现行管理制度、办事流程、常用文件模板与产品业务资料，确认有效性与版本后在线查阅或下载。</p>
+        </div>
+        <div class="stat">
+          <span class="dot"></span>
+          <span>现行有效资料 <b id="published-count">17</b> 份</span>
+        </div>
+      </div>
+
+      <!-- Quick Access Shelf (Jay Dumadiya Inspired) -->
+      <section class="quick" aria-labelledby="quick-title">
+        <div class="shelf-head">
+          <div class="shelf-title">
+            <span class="star-badge">★</span>
+            <span id="quick-title">常用制度与高频资料</span>
+            <span class="chip-count">4</span>
+          </div>
+          <span class="shelf-tip">全员高频查阅的规章制度、报销模板与标准规范速查</span>
+        </div>
+        <div class="quick-grid" id="quick-grid"></div>
+      </section>
+
+      <!-- Control Panel (LogiLink Chips + Unified Toolbar) -->
+      <section class="panel">
+        <!-- Category Chips -->
+        <div class="category-scroll-container">
+          <div class="chips-group" id="categoryChips">
+            <button class="chip-btn" data-category="all">
+              <span>全部</span>
+              <span class="chip-count" id="count-all">18</span>
+            </button>
+            <button class="chip-btn active" data-category="policy">
+              <span>制度与手册</span>
+              <span class="chip-count" id="count-policy">4</span>
+            </button>
+            <button class="chip-btn" data-category="process">
+              <span>流程与表单</span>
+              <span class="chip-count" id="count-process">4</span>
+            </button>
+            <button class="chip-btn" data-category="template">
+              <span>模板与文件</span>
+              <span class="chip-count" id="count-template">4</span>
+            </button>
+            <button class="chip-btn" data-category="product">
+              <span>产品资料</span>
+              <span class="chip-count" id="count-product">3</span>
+            </button>
+            <button class="chip-btn" data-category="training">
+              <span>培训与学习</span>
+              <span class="chip-count" id="count-training">3</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Tools Row -->
+        <div class="filter-tools-row">
+          <div class="search-box">
+            <span class="search-icon-left">🔍</span>
+            <input
+              id="q"
+              type="text"
+              placeholder="搜索资料名称、拼音首字母、事由或责任部门…"
+              autocomplete="off"
+            />
+            <button class="clear-q" id="clear-q" type="button" aria-label="清空搜索">✕</button>
+          </div>
+
+          <div class="filter-actions">
+            <!-- Segmented Status Switch -->
+            <div class="segmented-control" id="statusSegment">
+              <button class="segment-btn active" data-status="published">仅看有效</button>
+              <button class="segment-btn" data-status="with-archived">含已归档</button>
+              <button class="segment-btn" data-status="archived">仅看已归档</button>
+            </div>
+
+            <!-- Topic Select -->
+            <div class="select-wrap">
+              <select class="custom-select" id="topic" aria-label="业务主题">
+                <option value="">全部主题</option>
+              </select>
+              <span class="select-chevron">▼</span>
+            </div>
+
+            <button class="more-btn" id="more-btn" type="button" aria-expanded="false" aria-controls="more-panel">
+              <span>更多筛选</span>
+              <span class="select-chevron">▼</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- More Filter Accordion Panel -->
+        <div class="more-panel" id="more-panel">
+          <label class="field">
+            <span>适用对象</span>
+            <div class="select-wrap">
+              <select class="custom-select" id="audience"></select>
+              <span class="select-chevron">▼</span>
+            </div>
+          </label>
+          <label class="field">
+            <span>责任部门</span>
+            <div class="select-wrap">
+              <select class="custom-select" id="owner"></select>
+              <span class="select-chevron">▼</span>
+            </div>
+          </label>
+          <label class="field">
+            <span>资料类型</span>
+            <div class="select-wrap">
+              <select class="custom-select" id="doc-type"></select>
+              <span class="select-chevron">▼</span>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- Document Table Sheet (Groto Inspired) -->
+      <div class="matrix-section-title">
+        <h2 id="list-title">制度与手册</h2>
+        <span class="results-count" id="result-count">显示 4 份资料</span>
+      </div>
+
+      <div class="sheet">
+        <div class="list-head">
+          <span>格式</span>
+          <span>资料名称与说明</span>
+          <span>类型</span>
+          <span>主题领域</span>
+          <span>适用对象</span>
+          <span>版本与状态</span>
+          <span>更新日期</span>
+          <span>责任部门</span>
+          <span style="text-align:right">操作</span>
+        </div>
+        <div class="list" id="list"></div>
+        <div class="empty" id="empty">
+          <div class="empty-icon">🔎</div>
+          <h3>没有找到符合条件的资料</h3>
+          <p id="empty-text">可更换分类，或清空搜索和筛选后再试。</p>
+          <button type="button" id="reset">清空搜索与筛选</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Global Footer -->
+    <footer>
+      <div class="footer-inner">
+        <div>制度与资料由各责任部门维护，以标注为现行有效的版本为准。</div>
+        <div class="footer-links">
+          <a href="help.html">IT 与综合服务支持</a>
+          <a href="help.html#feedback">资料勘误与建议反馈</a>
+          <a href="apps.html">前往应用中心</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Preview Modal & Sheet -->
+  <div class="preview" id="preview" hidden onclick="closePreview(event)">
+    <div class="preview-panel" role="dialog" aria-modal="true" aria-labelledby="preview-title" onclick="event.stopPropagation()">
+      <div class="preview-bar">
+        <div class="preview-title-wrap">
+          <span class="badge-micro" id="preview-badge">PDF</span>
+          <h2 id="preview-title">资料名称</h2>
+          <div class="preview-meta-tags">
+            <span class="status-pill" id="preview-status">有效</span>
+            <span class="topic-tag" id="preview-topic">人力资源</span>
+          </div>
+        </div>
+        <div class="preview-actions-right">
+          <a class="preview-download" id="preview-download" href="#" hidden onclick="handleDownloadToast(event)">
+            <span>下载文件 ↓</span>
+          </a>
+          <button class="preview-close" id="preview-close" type="button" aria-label="关闭预览" onclick="closePreview()">✕</button>
+        </div>
+      </div>
+
+      <!-- Real Document Iframe -->
+      <iframe class="preview-frame" id="preview-frame" title="资料预览" hidden></iframe>
+
+      <!-- Formal Document Profile View for files without attachments -->
+      <div class="doc-profile-view" id="preview-profile" hidden>
+        <div class="profile-hero">
+          <h3 id="prof-title">员工手册</h3>
+          <p class="profile-summary" id="prof-summary">说明员工在职期间的权利义务、行为要求与日常管理规定。</p>
+        </div>
+
+        <div class="profile-meta-grid">
+          <div class="profile-meta-item">
+            <dt>现行版本</dt>
+            <dd id="prof-version">v3.2</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>生效日期</dt>
+            <dd id="prof-effective">2026年9月1日</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>复核周期</dt>
+            <dd id="prof-review">2027年3月1日</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>适用对象</dt>
+            <dd id="prof-audience">全体员工</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>责任部门</dt>
+            <dd id="prof-owner">人力资源部</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>咨询与支持</dt>
+            <dd id="prof-support">人力资源部，内线 8101</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>资料类别</dt>
+            <dd id="prof-type">制度与手册</dd>
+          </div>
+          <div class="profile-meta-item">
+            <dt>安全保密等级</dt>
+            <dd>内部公开 (Internal)</dd>
+          </div>
+        </div>
+
+        <div>
+          <div class="profile-section-title">
+            <span>📖</span> 核心章节与结构目录说明
+          </div>
+          <ol class="profile-outline-list" id="prof-outline"></ol>
+        </div>
+
+        <div class="profile-notice-box">
+          <span class="notice-icon">ℹ️</span>
+          <div>
+            <strong>版本与正式调阅说明：</strong><br />
+            <span>本制度规章以公司正式发文与人事系统备案为准。如需纸质盖章文本、中英文对照本或历史归档文件调阅，请直接联系责任部门经办人。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="resources-data.js"></script>
+  <script>
+    const eye = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg>';
+    const down = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/></svg>';
+    const state = { category: "policy", q: "", status: "published", topic: "", audience: "", owner: "", docType: "" };
+
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    const formatDate = (iso) => { if (!iso) return "-"; const [y, m, d] = iso.split("-"); return `${y}年${Number(m)}月${Number(d)}日`; };
+    const formatSize = (bytes) => `${(bytes / 1048576).toFixed(1)} MB`;
+    const byId = (id) => RESOURCES.find((item) => item.id === id);
+    const categoryLabel = (id) => {
+      if (id === "all") return "全部资料";
+      return RESOURCE_CATEGORIES.find((item) => item.id === id)?.label || "资料列表";
+    };
+
+    function fillSelect(id, values, placeholder) {
+      const el = document.getElementById(id);
+      el.innerHTML = `<option value="">${placeholder}</option>` + values.map((value) => `<option value="${esc(value)}">${esc(value)}</option>`).join("");
+    }
+
+    function matches(item) {
+      if (state.category !== "all" && item.category !== state.category) return false;
+      if (state.status === "published" && item.status !== "published") return false;
+      if (state.status === "archived" && item.status !== "archived") return false;
+      if (state.topic && item.topic !== state.topic) return false;
+      if (state.audience && item.audience !== state.audience) return false;
+      if (state.owner && item.owner !== state.owner) return false;
+      if (state.docType && item.docType !== state.docType) return false;
+      if (state.q) {
+        const hay = [item.title, item.summary, item.owner, item.topic, item.docType, ...(item.aliases || [])].join(" ").toLowerCase();
+        if (!hay.includes(state.q.toLowerCase())) return false;
+      }
+      return true;
+    }
+
+    function sorted(items) {
+      return items.slice().sort((a, b) => {
+        if (a.featured !== b.featured) return a.featured ? -1 : 1;
+        return b.updatedAt.localeCompare(a.updatedAt);
+      });
+    }
+
+    function statusLabel(status) {
+      return status === "archived" ? "已归档" : "有效";
+    }
+
+    function renderQuick() {
+      const items = RESOURCES.filter((item) => item.quickAccess);
+      document.getElementById("quick-grid").innerHTML = items.map((item, index) => `
+        <button class="qa" type="button" data-preview="${item.id}" style="animation-delay:${index * 40}ms">
+          <div class="qa-top">
+            <div class="qa-icon-wrap">
+              <span class="format-icon ${item.format}">${item.format.toUpperCase()}</span>
+            </div>
+            <span class="qa-arrow">↗</span>
+          </div>
+          <div class="qa-body">
+            <b>${esc(item.title)}</b>
+            <em>${esc(item.owner)}</em>
+          </div>
+          <div class="qa-foot">
+            <span>${esc(item.version)}</span>
+            <span>${formatDate(item.updatedAt)}</span>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function updateCategoryCounts() {
+      const totalAll = RESOURCES.filter(item => item.status === "published").length;
+      document.getElementById("count-all").textContent = totalAll;
+      RESOURCE_CATEGORIES.forEach(cat => {
+        const count = RESOURCES.filter(item => item.category === cat.id && item.status === "published").length;
+        const el = document.getElementById(`count-${cat.id}`);
+        if (el) el.textContent = count;
+      });
+      document.getElementById("published-count").textContent = totalAll;
+    }
+
+    function renderList() {
+      const items = sorted(RESOURCES.filter(matches));
+      document.getElementById("list-title").textContent = categoryLabel(state.category);
+      document.getElementById("result-count").textContent = `显示 ${items.length} 份资料`;
+      const list = document.getElementById("list");
+      const empty = document.getElementById("empty");
+      const head = document.querySelector(".list-head");
+
+      if (!items.length) {
+        list.innerHTML = "";
+        head.style.display = "none";
+        empty.style.display = "block";
+        const publishedInCategory = RESOURCES.some((item) => (state.category === "all" || item.category === state.category) && item.status === "published");
+        document.getElementById("empty-text").textContent = publishedInCategory
+          ? "可尝试精简搜索关键词，或调整右侧的筛选条件。"
+          : "本分类暂无现行有效资料。如需查阅历史资料，可切换上方状态为「含已归档」。";
+        return;
+      }
+
+      head.style.display = "grid";
+      empty.style.display = "none";
+
+      list.innerHTML = items.map((item, index) => {
+        const download = item.file
+          ? `<a class="icon-btn" href="${item.file}" download="${esc(item.fileName)}" title="下载文件" onclick="event.stopPropagation(); triggerDownloadToast('${esc(item.title)}')">${down}</a>`
+          : "";
+        return `
+          <article class="doc-row" data-preview="${item.id}" style="animation-delay:${Math.min(index, 10) * 30}ms">
+            <span class="badge-micro ${item.format}">${item.format.toUpperCase()}</span>
+            <div class="doc-main">
+              <div class="doc-title">
+                ${item.featured ? '<span class="pin">置顶</span>' : ""}
+                <button class="title-btn" type="button">${esc(item.title)}</button>
+              </div>
+              <p class="doc-summary">${esc(item.summary)}</p>
+            </div>
+            <span class="cell">${esc(item.docType)}</span>
+            <span class="cell"><span class="topic-tag">${esc(item.topic)}</span></span>
+            <span class="cell">${esc(item.audience)}</span>
+            <span class="ver-meta">
+              <span class="ver-number">${esc(item.version)}</span>
+              <span class="status-pill ${item.status === 'archived' ? 'archived' : ''}">${statusLabel(item.status)}</span>
+            </span>
+            <span class="cell">${formatDate(item.updatedAt)}</span>
+            <span class="cell">${esc(item.owner)}</span>
+            <span class="actions">
+              <button class="icon-btn" type="button" title="在线预览">${eye}</button>
+              ${download}
+            </span>
+          </article>`;
+      }).join("");
+    }
+
+    function rememberCategory() {
+      const url = new URL(location.href);
+      if (state.category !== "all") url.searchParams.set("category", state.category);
+      else url.searchParams.delete("category");
+      if (state.q) url.searchParams.set("q", state.q);
+      else url.searchParams.delete("q");
+      history.replaceState(null, "", url);
+      if (state.category !== "all") localStorage.setItem("portal_resource_category", state.category);
+    }
+
+    function render() {
+      // Update Chips UI
+      document.querySelectorAll("#categoryChips .chip-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.category === state.category);
+      });
+      renderList();
+      rememberCategory();
+    }
+
+    function unique(key) {
+      return [...new Set(RESOURCES.map((item) => item[key]))].filter(Boolean);
+    }
+
+    // Modal Operations
+    let currentPreviewItem = null;
+
+    function openPreview(id) {
+      const item = byId(id);
+      if (!item) return;
+      currentPreviewItem = item;
+
+      const root = document.getElementById("preview");
+      const frame = document.getElementById("preview-frame");
+      const profile = document.getElementById("preview-profile");
+      const download = document.getElementById("preview-download");
+      const badge = document.getElementById("preview-badge");
+      const statusPill = document.getElementById("preview-status");
+      const topicTag = document.getElementById("preview-topic");
+
+      document.getElementById("preview-title").textContent = item.title;
+      badge.textContent = item.format.toUpperCase();
+      badge.className = `badge-micro ${item.format}`;
+      statusPill.textContent = statusLabel(item.status);
+      statusPill.className = `status-pill ${item.status === 'archived' ? 'archived' : ''}`;
+      topicTag.textContent = item.topic;
+
+      if (item.file) {
+        // Document with real downloadable/viewable PDF
+        frame.hidden = false;
+        frame.src = item.file;
+        profile.hidden = true;
+        download.hidden = false;
+        download.href = item.file;
+        download.setAttribute("download", item.fileName);
+        download.innerHTML = `<span>下载 PDF (${item.version}，${formatSize(item.fileSize)}) ↓</span>`;
+      } else {
+        // Document without file attachment -> Show rich profile
+        frame.hidden = true;
+        frame.removeAttribute("src");
+        profile.hidden = false;
+        download.hidden = true;
+
+        document.getElementById("prof-title").textContent = item.title;
+        document.getElementById("prof-summary").textContent = item.summary;
+        document.getElementById("prof-version").textContent = item.version;
+        document.getElementById("prof-effective").textContent = formatDate(item.effectiveDate);
+        document.getElementById("prof-review").textContent = formatDate(item.reviewDate);
+        document.getElementById("prof-audience").textContent = item.audience;
+        document.getElementById("prof-owner").textContent = item.owner;
+        document.getElementById("prof-support").textContent = item.support;
+        document.getElementById("prof-type").textContent = item.docType;
+
+        const outlineList = document.getElementById("prof-outline");
+        if (item.outline && item.outline.length) {
+          outlineList.innerHTML = item.outline.map(line => `<li>${esc(line)}</li>`).join("");
+        } else {
+          outlineList.innerHTML = `<li>总则与适用范围</li><li>主要规程与办事手续</li><li>违规处理与监督机制</li>`;
+        }
+      }
+
+      root.hidden = false;
+      requestAnimationFrame(() => {
+        root.classList.add("open");
+      });
+      document.getElementById("preview-close").focus();
+    }
+
+    function closePreview(event) {
+      if (event && event.target !== event.currentTarget) return;
+      const root = document.getElementById("preview");
+      const frame = document.getElementById("preview-frame");
+      root.classList.remove("open");
+      setTimeout(() => {
+        root.hidden = true;
+        frame.removeAttribute("src");
+      }, 200);
+      const url = new URL(location.href);
+      url.searchParams.delete("preview");
+      history.replaceState(null, "", url);
+    }
+
+    function handleDownloadToast(e) {
+      if (currentPreviewItem) {
+        triggerDownloadToast(currentPreviewItem.title);
+      }
+    }
+
+    function triggerDownloadToast(name) {
+      showToast(`已开始下载资料: ${name} … 📥`);
+    }
+
+    // Toast Notification System (Sonner style)
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<span>💬</span> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.add("show");
+      });
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      }, 3000);
+    }
+
+    // Reset Filters
+    function resetFilters() {
+      state.category = "all";
+      state.q = "";
+      state.status = "published";
+      state.topic = "";
+      state.audience = "";
+      state.owner = "";
+      state.docType = "";
+
+      document.getElementById("q").value = "";
+      document.getElementById("clear-q").style.display = "none";
+      document.getElementById("topic").value = "";
+      document.getElementById("audience").value = "";
+      document.getElementById("owner").value = "";
+      document.getElementById("doc-type").value = "";
+
+      document.querySelectorAll("#statusSegment .segment-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.status === "published");
+      });
+
+      render();
+    }
+
+    // Event Listeners Initialization
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCategoryCounts();
+      fillSelect("topic", unique("topic"), "全部主题");
+      fillSelect("audience", unique("audience"), "全部适用对象");
+      fillSelect("owner", unique("owner"), "全部责任部门");
+      fillSelect("doc-type", unique("docType"), "全部资料类型");
+      renderQuick();
+
+      const params = new URLSearchParams(location.search);
+      const saved = localStorage.getItem("portal_resource_category");
+      const previewItem = byId(params.get("preview"));
+      const requested = previewItem?.category || params.get("category") || saved || "policy";
+      if (requested === "all" || RESOURCE_CATEGORIES.some((item) => item.id === requested)) {
+        state.category = requested;
+      }
+      if (params.get("q")) {
+        state.q = params.get("q");
+        document.getElementById("q").value = state.q;
+        document.getElementById("clear-q").style.display = "flex";
+      }
+
+      render();
+
+      // Category Chips
+      document.getElementById("categoryChips").addEventListener("click", (event) => {
+        const btn = event.target.closest(".chip-btn");
+        if (!btn) return;
+        state.category = btn.dataset.category;
+        render();
+      });
+
+      // Status Segment
+      document.getElementById("statusSegment").addEventListener("click", (event) => {
+        const btn = event.target.closest(".segment-btn");
+        if (!btn) return;
+        document.querySelectorAll("#statusSegment .segment-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.status = btn.dataset.status;
+        render();
+      });
+
+      // Quick Search
+      const qInput = document.getElementById("q");
+      const clearBtn = document.getElementById("clear-q");
+
+      qInput.addEventListener("input", (event) => {
+        state.q = event.target.value.trim();
+        clearBtn.style.display = state.q ? "flex" : "none";
+        render();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        qInput.value = "";
+        state.q = "";
+        clearBtn.style.display = "none";
+        qInput.focus();
+        render();
+      });
+
+      // Select Dropdowns
+      ["topic", "audience", "owner"].forEach((id) => {
+        document.getElementById(id).addEventListener("change", (event) => {
+          state[id] = event.target.value;
+          render();
+        });
+      });
+      document.getElementById("doc-type").addEventListener("change", (event) => {
+        state.docType = event.target.value;
+        render();
+      });
+
+      // More Filters Button
+      document.getElementById("more-btn").addEventListener("click", () => {
+        const panel = document.getElementById("more-panel");
+        const open = panel.classList.toggle("open");
+        document.getElementById("more-btn").setAttribute("aria-expanded", String(open));
+      });
+
+      // Reset Button
+      document.getElementById("reset").addEventListener("click", resetFilters);
+
+      // Card & Row Click delegation for Preview
+      document.getElementById("quick-grid").addEventListener("click", (event) => {
+        const card = event.target.closest("[data-preview]");
+        if (!card) return;
+        openPreview(card.dataset.preview);
+      });
+
+      document.getElementById("list").addEventListener("click", (event) => {
+        if (event.target.closest("a[download]")) return;
+        const row = event.target.closest("[data-preview]");
+        if (!row) return;
+        openPreview(row.dataset.preview);
+      });
+
+      // Focus Search via Command-K or /
+      document.getElementById("focus-search").addEventListener("click", () => {
+        qInput.focus();
+        qInput.select();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && document.getElementById("preview").classList.contains("open")) {
+          closePreview();
+          return;
+        }
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          qInput.focus();
+          qInput.select();
+        } else if (event.key === "/" && document.activeElement !== qInput) {
+          event.preventDefault();
+          qInput.focus();
+          qInput.select();
+        }
+      });
+
+      const previewId = params.get("preview");
+      if (previewId && byId(previewId)) openPreview(previewId);
+    });
+  </script>
+</body>
+</html>
