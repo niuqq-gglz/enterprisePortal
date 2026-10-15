@@ -9,30 +9,7 @@
 <body>
   <a class="skip" href="#main">跳到主要内容</a>
   <div class="frame">
-    <!-- Header -->
-    <header>
-      <a class="logo" href="homepage-mockup.html">
-        <span class="mark">门</span>
-        企业员工门户
-      </a>
-      <nav>
-        <a href="homepage-mockup.html">首页</a>
-        <a href="apps.html">应用中心</a>
-        <a class="active" href="resources.html">制度与资料</a>
-        <a href="products.html">产品与业务</a>
-        <a href="onboarding.html">入职指南</a>
-        <a href="news.html">新闻公告</a>
-        <a href="help.html" hidden style="display:none">帮助支持</a>
-      </nav>
-      <div class="header-tools">
-        <div class="cmdk" id="focus-search">
-          <span>搜索制度、流程、模板…</span>
-          <kbd>⌘K</kbd>
-        </div>
-        <a class="logout" href="index.html">退出</a>
-      </div>
-    </header>
-
+    <a class="leave" href="index.html">退出</a>
     <!-- Main Container -->
     <main id="main">
       <!-- Breadcrumbs & Header -->
@@ -682,12 +659,6 @@
         const row = event.target.closest("[data-preview]");
         if (!row) return;
         openPreview(row.dataset.preview);
-      });
-
-      // Focus Search via Command-K or /
-      document.getElementById("focus-search").addEventListener("click", () => {
-        qInput.focus();
-        qInput.select();
       });
 
       document.addEventListener("keydown", (event) => {

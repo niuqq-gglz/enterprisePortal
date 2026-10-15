@@ -1,9 +1,10 @@
 (function () {
+  const NEWS_PAGE_SIZE = 6;
+  const NOTICE_PAGE_SIZE = 8;
+  const isNoticePage = /notices\.html$/i.test(location.pathname);
   const NEWS = window.PORTAL_NEWS.slice().sort((a, b) => (a.publishAt < b.publishAt ? 1 : -1));
   const NOTICES = window.PORTAL_NOTICES.slice();
   const view = document.getElementById("view");
-
-  const STATUS_LABEL = { active: "有效", pending: "待生效", expired: "已失效" };
 
   function esc(value) {
     return String(value).replace(/[&<>"']/g, (ch) => ({
@@ -40,8 +41,6 @@
   }
 
   function noticeRank(item) {
-    if (item.status === "expired") return 3;
-    if (item.status === "pending") return 2;
     if (item.pinned) return 0;
     return 1;
   }
@@ -54,90 +53,106 @@
     });
   }
 
-  function activeNoticeCount() {
-    return NOTICES.filter((item) => item.status === "active").length;
-  }
-
   function params() {
     return new URLSearchParams(location.search);
   }
 
   function newsHref(extra) {
     const q = new URLSearchParams();
-    if (extra.tag) q.set("tag", extra.tag);
     if (extra.q) q.set("q", extra.q);
+    if (extra.page > 1) q.set("page", String(extra.page));
     const s = q.toString();
     return s ? `news.html?${s}` : "news.html";
   }
 
   function noticeHref(extra) {
     const q = new URLSearchParams();
-    q.set("tab", "notice");
-    if (extra.scope && extra.scope !== "current") q.set("scope", extra.scope);
     if (extra.q) q.set("q", extra.q);
-    return `news.html?${q.toString()}`;
+    if (extra.page > 1) q.set("page", String(extra.page));
+    const s = q.toString();
+    return s ? `notices.html?${s}` : "notices.html";
   }
 
-  function setTitle(text) {
-    document.title = text ? `${text} · 新闻公告 · 企业员工门户` : "新闻公告 · 企业员工门户";
+  function clampPage(raw, pages) {
+    const n = Number(raw);
+    if (!Number.isFinite(n) || n < 1) return 1;
+    return Math.min(pages, Math.floor(n));
   }
 
-  function crumbBar(current) {
-    if (!current) {
-      return `<nav class="crumbs" aria-label="面包屑"><a href="homepage-mockup.html">首页</a><span aria-hidden="true">/</span><span class="cur">新闻公告</span></nav>`;
+  function pagerNav(hrefFor, page, pages) {
+    if (pages <= 1) return "";
+    const prev = page > 1
+      ? `<a class="pager-step" href="${esc(hrefFor(page - 1))}" rel="prev">上一页</a>`
+      : `<span class="pager-step is-disabled">上一页</span>`;
+    const next = page < pages
+      ? `<a class="pager-step" href="${esc(hrefFor(page + 1))}" rel="next">下一页</a>`
+      : `<span class="pager-step is-disabled">下一页</span>`;
+    let nums = "";
+    for (let i = 1; i <= pages; i += 1) {
+      nums += i === page
+        ? `<span class="pager-num is-current" aria-current="page">${i}</span>`
+        : `<a class="pager-num" href="${esc(hrefFor(i))}">${i}</a>`;
     }
-    return `<nav class="crumbs" aria-label="面包屑"><a href="homepage-mockup.html">首页</a><span aria-hidden="true">/</span><a href="news.html">新闻公告</a><span aria-hidden="true">/</span><span class="cur">${esc(current)}</span></nav>`;
+    return `<nav class="pager" aria-label="分页">${prev}<div class="pager-nums">${nums}</div>${next}</nav>`;
   }
 
-  function pageHead() {
+  function setTitle(text, section) {
+    const tail = section || (isNoticePage ? "公告" : "新闻");
+    document.title = text ? `${text} · ${tail} · 企业员工门户` : `${tail} · 企业员工门户`;
+  }
+
+  function crumbBar(section, href, current) {
+    const here = current
+      ? `<a href="${href}">${esc(section)}</a><span aria-hidden="true">/</span><span class="cur">${esc(current)}</span>`
+      : `<span class="cur">${esc(section)}</span>`;
+    return `<nav class="crumbs" aria-label="面包屑"><a href="homepage-mockup.html">首页</a><span aria-hidden="true">/</span>${here}</nav>`;
+  }
+
+  function newsHead() {
     return `
       <div class="page-head">
         <div>
-          <h1>新闻公告</h1>
-          <p>展示公司新闻与正式公告。新闻用于了解公司近期动态与活动，公告用于传达需员工知悉或配合办理的事项。</p>
+          <h1>新闻</h1>
         </div>
         <div class="head-stats">
-          <span>新闻 ${NEWS.length}</span>
-          <span>有效公告 ${activeNoticeCount()}</span>
+          <span>共 ${NEWS.length} 条</span>
         </div>
       </div>`;
   }
 
-  function tabBar(tab) {
+  function noticeHead() {
     return `
-      <div class="tabs" role="tablist" aria-label="新闻与公告">
-        <a role="tab" href="news.html" aria-selected="${tab === "news" ? "true" : "false"}">新闻</a>
-        <a role="tab" href="news.html?tab=notice" aria-selected="${tab === "notice" ? "true" : "false"}">公告</a>
+      <div class="page-head">
+        <div>
+          <h1>公告</h1>
+        </div>
+        <div class="head-stats">
+          <span>共 ${NOTICES.length} 条</span>
+        </div>
       </div>`;
   }
 
   function renderNewsList() {
     const q = params();
-    const tag = q.get("tag") || "";
     const keyword = (q.get("q") || "").trim();
     const folded = keyword.toLowerCase();
 
-    let list = NEWS.filter((item) => {
-      if (tag && item.tag !== tag) return false;
+    const list = NEWS.filter((item) => {
       if (!folded) return true;
-      const hay = item.title.toLowerCase();
-      return hay.includes(folded);
+      return item.title.toLowerCase().includes(folded);
     });
 
-    const showLead = !tag && !keyword && list.length > 0;
-    const lead = showLead ? list[0] : null;
-    const rest = showLead ? list.slice(1) : list;
-
-    const tags = window.NEWS_TAGS.map((name) => {
-      const href = newsHref({ tag: name === tag ? "" : name, q: keyword });
-      const current = name === tag ? ` aria-current="true"` : "";
-      return `<a href="${esc(href)}"${current}>${esc(name)}</a>`;
-    }).join("");
+    const pages = Math.max(1, Math.ceil(list.length / NEWS_PAGE_SIZE) || 1);
+    const page = list.length ? clampPage(q.get("page"), pages) : 1;
+    const slice = list.slice((page - 1) * NEWS_PAGE_SIZE, page * NEWS_PAGE_SIZE);
+    const showLead = page === 1 && !keyword && slice.length > 0;
+    const lead = showLead ? slice[0] : null;
+    const rest = showLead ? slice.slice(1) : slice;
 
     const cards = rest.map((item) => `
       <a class="card" href="news.html?id=${esc(item.id)}">
         <span class="card-media"><img src="${esc(item.cover)}" alt="${esc(item.coverAlt)}"></span>
-        <span class="kicker"><span class="tag">${esc(item.tag)}</span><i class="dot"></i><time datetime="${esc(item.publishAt)}">${formatDate(item.publishAt)}</time></span>
+        <span class="kicker"><time datetime="${esc(item.publishAt)}">${formatDate(item.publishAt)}</time></span>
         <span class="card-title">${esc(item.title)}</span>
         <span class="card-sum">${esc(item.summary)}</span>
         <span class="card-dept">${esc(item.authorDepartment)}</span>
@@ -147,7 +162,7 @@
       <a class="lead" href="news.html?id=${esc(lead.id)}">
         <span class="lead-media"><img src="${esc(lead.cover)}" alt="${esc(lead.coverAlt)}"></span>
         <span class="lead-body">
-          <span class="kicker"><span class="tag">${esc(lead.tag)}</span><i class="dot"></i><time datetime="${esc(lead.publishAt)}">${formatDate(lead.publishAt)}</time></span>
+          <span class="kicker"><time datetime="${esc(lead.publishAt)}">${formatDate(lead.publishAt)}</time></span>
           <span class="lead-title">${esc(lead.title)}</span>
           <span class="lead-sum">${esc(lead.summary)}</span>
           <span class="lead-foot"><span>${esc(lead.authorDepartment)}</span><span class="more-link">阅读全文</span></span>
@@ -157,24 +172,17 @@
     const empty = list.length === 0 ? `
       <div class="empty">
         <h2>没有符合条件的新闻</h2>
-        <p>可更换标签，或清空搜索后再试。</p>
+        <p>可清空搜索后再试。</p>
         <a href="news.html">查看全部新闻</a>
       </div>` : "";
 
-    const count = tag || keyword
-      ? `<p class="result-line">显示 ${list.length} 条</p>`
-      : "";
+    const count = `<p class="result-line">共 ${list.length} 条${pages > 1 ? `，第 ${page} / ${pages} 页` : ""}</p>`;
+    const pager = pagerNav((n) => newsHref({ q: keyword, page: n }), page, pages);
 
     view.innerHTML = `
-      ${crumbBar("")}
-      ${pageHead()}
-      ${tabBar("news")}
+      ${crumbBar("新闻", "news.html")}
+      ${newsHead()}
       <form class="toolbar" method="get" action="news.html" role="search">
-        ${tag ? `<input type="hidden" name="tag" value="${esc(tag)}">` : ""}
-        <div class="filters" aria-label="新闻标签">
-          <a href="${esc(newsHref({ q: keyword }))}"${tag ? "" : ` aria-current="true"`}>全部</a>
-          ${tags}
-        </div>
         <div class="search">
           <input id="q" name="q" type="search" value="${esc(keyword)}" placeholder="搜索标题" autocomplete="off">
         </div>
@@ -182,43 +190,28 @@
       ${count}
       ${leadHtml}
       ${rest.length ? `<div class="grid">${cards}</div>` : ""}
-      ${empty}`;
+      ${empty}
+      ${pager}`;
     setTitle("");
   }
 
   function renderNoticeList() {
     const q = params();
-    const scope = q.get("scope") || "current";
     const keyword = (q.get("q") || "").trim();
     const folded = keyword.toLowerCase();
 
-    let list = NOTICES.filter((item) => {
-      if (scope === "current" && item.status === "expired") return false;
-      if (scope === "active" && item.status !== "active") return false;
-      if (scope === "expired" && item.status !== "expired") return false;
+    const list = sortedNotices(NOTICES.filter((item) => {
       if (!folded) return true;
-      const hay = item.title.toLowerCase();
-      return hay.includes(folded);
-    });
-    list = sortedNotices(list);
+      return item.title.toLowerCase().includes(folded);
+    }));
+    const pages = Math.max(1, Math.ceil(list.length / NOTICE_PAGE_SIZE) || 1);
+    const page = list.length ? clampPage(q.get("page"), pages) : 1;
+    const slice = list.slice((page - 1) * NOTICE_PAGE_SIZE, page * NOTICE_PAGE_SIZE);
 
-    const scopes = [
-      ["current", "有效与待生效"],
-      ["active", "仅有效"],
-      ["expired", "已失效"],
-      ["all", "全部"]
-    ];
-
-    const filters = scopes.map(([id, label]) => {
-      const href = noticeHref({ scope: id, q: keyword });
-      return `<a href="${esc(href)}"${id === scope ? ` aria-current="true"` : ""}>${esc(label)}</a>`;
-    }).join("");
-
-    const rows = list.map((item) => `
-      <div class="nrow ${item.pinned && item.status === "active" ? "pinned" : ""} ${item.status === "expired" ? "expired" : ""}">
-        <span class="status ${esc(item.status)}"><i></i>${STATUS_LABEL[item.status]}</span>
+    const rows = slice.map((item) => `
+      <div class="nrow ${item.pinned ? "pinned" : ""}">
         <span>
-          <span class="ntitle">${item.pinned && item.status === "active" ? '<span class="pin">置顶</span>' : ""}${esc(item.title)}</span>
+          <span class="ntitle">${item.pinned ? '<span class="pin">置顶</span>' : ""}${esc(item.title)}</span>
           <span class="nsum">${esc(item.summary)}</span>
         </span>
         <span class="cell">${esc(item.audience)}</span>
@@ -234,12 +227,11 @@
     const empty = list.length === 0 ? `
       <div class="empty">
         <h2>没有符合条件的公告</h2>
-        <p>可切换状态，或清空搜索后再试。</p>
-        <a href="news.html?tab=notice">查看有效公告</a>
+        <p>可清空搜索后再试。</p>
+        <a href="notices.html">查看全部公告</a>
       </div>` : `
       <div class="sheet">
         <div class="sheet-head">
-          <span>状态</span>
           <span>标题</span>
           <span>适用对象</span>
           <span>有效期</span>
@@ -250,21 +242,20 @@
         ${rows}
       </div>`;
 
+    const pager = pagerNav((n) => noticeHref({ q: keyword, page: n }), page, pages);
+
     view.innerHTML = `
-      ${crumbBar("")}
-      ${pageHead()}
-      ${tabBar("notice")}
-      <form class="toolbar" method="get" action="news.html" role="search">
-        <input type="hidden" name="tab" value="notice">
-        ${scope !== "current" ? `<input type="hidden" name="scope" value="${esc(scope)}">` : ""}
-        <div class="filters" aria-label="公告状态">${filters}</div>
+      ${crumbBar("公告", "notices.html")}
+      ${noticeHead()}
+      <form class="toolbar" method="get" action="notices.html" role="search">
         <div class="search">
           <input id="q" name="q" type="search" value="${esc(keyword)}" placeholder="搜索标题" autocomplete="off">
         </div>
       </form>
-      <p class="result-line">显示 ${list.length} 条${scope === "current" ? "，已失效公告默认不列出" : ""}</p>
-      ${empty}`;
-    setTitle("公告");
+      <p class="result-line">共 ${list.length} 条${pages > 1 ? `，第 ${page} / ${pages} 页` : ""}</p>
+      ${empty}
+      ${pager}`;
+    setTitle("");
   }
 
   function renderNewsDetail(id) {
@@ -295,16 +286,16 @@
           <img src="${esc(rel.cover)}" alt="">
           <span>
             <strong>${esc(rel.title)}</strong>
-            <em>${esc(rel.tag)} · ${formatDate(rel.publishAt)}</em>
+            <em>${formatDate(rel.publishAt)}</em>
           </span>
         </a>`).join("");
 
     view.innerHTML = `
-      ${crumbBar(item.title)}
+      ${crumbBar("新闻", "news.html", item.title)}
       <a class="back" href="news.html">返回新闻</a>
       <article>
         <header class="article-head">
-          <div class="kicker"><span class="tag">${esc(item.tag)}</span><i class="dot"></i><time datetime="${esc(item.publishAt)}">${formatDate(item.publishAt)}</time></div>
+          <div class="kicker"><time datetime="${esc(item.publishAt)}">${formatDate(item.publishAt)}</time></div>
           <h1>${esc(item.title)}</h1>
           <p class="lede">${esc(item.summary)}</p>
           <div class="byline"><span>${esc(item.authorDepartment)}</span><span>发布于 ${formatDate(item.publishAt)}</span></div>
@@ -322,7 +313,7 @@
   function renderNoticeDetail(id) {
     const item = noticeById(id);
     if (!item) {
-      view.innerHTML = `<div class="empty"><h2>未找到这条公告</h2><p>请从公告列表重新进入。</p><a href="news.html?tab=notice">返回公告</a></div>`;
+      view.innerHTML = `<div class="empty"><h2>未找到这条公告</h2><p>请从公告列表重新进入。</p><a href="notices.html">返回公告</a></div>`;
       setTitle("未找到");
       return;
     }
@@ -339,8 +330,8 @@
       </div>` : "";
 
     view.innerHTML = `
-      ${crumbBar(item.title)}
-      <a class="back" href="news.html?tab=notice">返回公告</a>
+      ${crumbBar("公告", "notices.html", item.title)}
+      <a class="back" href="notices.html">返回公告</a>
       ${fileBlock}`;
     setTitle(item.title);
   }
@@ -348,6 +339,17 @@
   function render() {
     const q = params();
     const id = q.get("id");
+    if (!isNoticePage && (q.get("tab") === "notice" || (id && id.indexOf("NTC-") === 0))) {
+      const next = new URLSearchParams(location.search);
+      next.delete("tab");
+      const query = next.toString();
+      location.replace(query ? `notices.html?${query}` : "notices.html");
+      return;
+    }
+    if (isNoticePage && id && id.indexOf("NTC-") !== 0) {
+      location.replace(`news.html?id=${encodeURIComponent(id)}`);
+      return;
+    }
     if (id && id.indexOf("NTC-") === 0) {
       renderNoticeDetail(id);
       return;
@@ -356,31 +358,19 @@
       renderNewsDetail(id);
       return;
     }
-    if (q.get("tab") === "notice") {
-      renderNoticeList();
-      return;
-    }
-    renderNewsList();
+    if (isNoticePage) renderNoticeList();
+    else renderNewsList();
   }
 
   document.addEventListener("keydown", (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
       event.preventDefault();
-      document.getElementById("openSearch").click();
+      const input = document.getElementById("q");
+      if (input) {
+        input.focus();
+        input.select();
+      }
     }
-  });
-
-  document.getElementById("openSearch").addEventListener("click", () => {
-    const input = document.getElementById("q");
-    if (input) {
-      input.focus();
-      input.select();
-      return;
-    }
-    const tab = params().get("tab") === "notice" || (params().get("id") || "").indexOf("NTC-") === 0
-      ? "news.html?tab=notice"
-      : "news.html";
-    location.href = tab;
   });
 
   render();
