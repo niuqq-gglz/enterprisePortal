@@ -20,18 +20,17 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     body {
-      background: #eef2f6;
+      background: var(--bg);
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
     }
     .frame {
-      width: 1440px;
+      width: 100%;
       margin: 0 auto;
       background: var(--bg);
       min-height: 100vh;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
     }
     header {
       height: 72px;
@@ -42,6 +41,9 @@
       align-items: center;
       padding: 0 40px;
       column-gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
     .logo {
       justify-self: start;
@@ -418,7 +420,7 @@
         <a href="apps.html">应用中心</a>
         <a href="resources.html">制度与资料</a>
         <a href="products.html">产品与业务</a>
-        <a href="#">入职指南</a>
+        <a href="onboarding.html">入职指南</a>
         <a href="#">新闻公告</a>
         <a href="#">帮助支持</a>
       </nav>
@@ -563,9 +565,9 @@
       <section class="banner">
         <div>
           <b>刚入职？从这里开始</b>
-          <p>公司介绍、必读制度、系统与设备、常见问题，按顺序看完即可。</p>
+          <p>公司介绍、必读资料、常用应用和业务入门，按主题看完即可。</p>
         </div>
-        <a class="btn" href="#">打开入职指南</a>
+        <a class="btn" href="onboarding.html">打开入职指南</a>
       </section>
     </main>
   </div>
