@@ -8,7 +8,19 @@ HTML_PATH = BASE / "企业员工门户一期产品与技术设计方案.html"
 
 source = MD_PATH.read_text(encoding="utf-8")
 parts = re.split(r"\n---\n", source, maxsplit=1)
+header = parts[0]
 body_source = parts[1] if len(parts) == 2 else source
+
+
+def meta(name: str) -> str:
+    match = re.search(rf"\*\*{name}：\*\*\s*(.+)", header)
+    return match.group(1).strip() if match else ""
+
+
+subtitle = meta("副标题") or "受控访问的员工信息与资源入口"
+version = meta("版本") or "2.10"
+date = meta("日期") or "2026 年 10 月 16 日"
+audience = meta("适用对象") or "产品、设计、研发、运维、安全、行政、人力资源"
 
 body = markdown.markdown(
     body_source,
@@ -23,8 +35,43 @@ body = markdown.markdown(
 
 body = re.sub(
     r"<h1 id=\"([^\"]+)\">(\d+)\.\s*([^<]+)</h1>",
-    r'<section class="chapter-head chapter-\2"><div class="chapter-num">CHAPTER \2</div><h1 id="\1">\2. \3</h1></section>',
+    r'<section class="chapter-head chapter-\2" id="ch-\2"><div class="chapter-num">CHAPTER \2</div><h1>\2. \3</h1></section>',
     body,
+)
+body = re.sub(
+    r"(<h2[^>]*>目录</h2>\s*)<ol>",
+    r'\1<ol class="toc">',
+    body,
+    count=1,
+)
+
+
+def _link_toc_item(match: re.Match, counter: list[int]) -> str:
+    counter[0] += 1
+    return f'<li><a href="#ch-{counter[0]}">{match.group(1)}</a></li>'
+
+
+def link_toc(html: str) -> str:
+    pattern = r"(<h2[^>]*>目录</h2>\s*<ol class=\"toc\">)(.*?)(</ol>)"
+    found = re.search(pattern, html, flags=re.S)
+    if not found:
+        return html
+    counter = [0]
+    inner = re.sub(
+        r"<li>(.*?)</li>",
+        lambda match: _link_toc_item(match, counter),
+        found.group(2),
+        flags=re.S,
+    )
+    return html[: found.start()] + found.group(1) + inner + found.group(3) + html[found.end() :]
+
+
+body = link_toc(body)
+body = re.sub(
+    r"(<h2[^>]*>1\.4 关键设计决策</h2>\s*<table)",
+    r'\1 class="label-col"',
+    body,
+    count=1,
 )
 
 css = r"""
@@ -114,7 +161,6 @@ body {
 }
 .cover-meta strong { color: var(--dark-warm); font-weight: 600; }
 .chapter-head { break-before: page; }
-.chapter-1,
 .chapter-3,
 .chapter-4,
 .chapter-6,
@@ -160,6 +206,7 @@ p { margin: 0 0 7.5pt; }
 strong { font-weight: 600; }
 a { color: var(--brand); text-decoration: none; overflow-wrap: anywhere; }
 ul, ol { margin: 4pt 0 8pt; padding-left: 20pt; }
+ol.toc a { color: var(--brand); text-decoration: none; }
 li { margin-bottom: 2pt; }
 li::marker { color: var(--brand); }
 blockquote {
@@ -203,6 +250,11 @@ td {
   vertical-align: top;
 }
 tbody tr:nth-child(even) td { background: var(--surface); }
+table.label-col th:first-child,
+table.label-col td:first-child {
+  width: 5.2em;
+  white-space: nowrap;
+}
 pre {
   font-family: var(--mono);
   font-size: 8pt;
@@ -265,12 +317,12 @@ html = f"""<!DOCTYPE html>
     <div>
       <div class="cover-eyebrow">产品与技术设计方案</div>
       <div class="cover-title">企业员工门户一期<br>产品与技术设计方案</div>
-      <div class="cover-sub">受控访问的员工信息与资源入口</div>
+      <div class="cover-sub">{subtitle}</div>
     </div>
     <div class="cover-meta">
-      <strong>版本 2.4</strong><br>
-      2026 年 10 月 14 日<br>
-      适用于产品、设计、研发、运维、安全与内容负责人
+      <strong>版本 {version}</strong><br>
+      {date}<br>
+      适用于{audience}
     </div>
   </section>
   <article class="document-body">
@@ -282,3 +334,12 @@ html = f"""<!DOCTYPE html>
 
 HTML_PATH.write_text(html, encoding="utf-8")
 print(HTML_PATH)
+
+PDF_PATH = BASE / "企业员工门户一期产品与技术设计方案.pdf"
+import os
+
+os.environ.setdefault("DYLD_FALLBACK_LIBRARY_PATH", "/opt/homebrew/lib")
+from weasyprint import HTML
+
+HTML(filename=str(HTML_PATH)).write_pdf(str(PDF_PATH))
+print(PDF_PATH)

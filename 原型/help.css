@@ -62,11 +62,18 @@ body {
   background: var(--bg);
 }
 
-.leave {
+.account {
   position: absolute;
   top: 28px;
   right: 40px;
   z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.leave {
   color: var(--muted);
   font-size: 14px;
   text-decoration: none;

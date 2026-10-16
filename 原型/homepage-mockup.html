@@ -33,10 +33,17 @@
       background: var(--bg);
       min-height: 100vh;
     }
-    .leave {
+    .account {
       position: absolute;
       top: 28px;
       right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .leave {
       color: var(--muted);
       font-size: 14px;
       text-decoration: none;
@@ -444,7 +451,7 @@
 </head>
 <body>
   <div class="frame">
-    <a class="leave" href="index.html">退出</a>
+    <div class="account"><span>name@ggquanta.com</span><a class="leave" href="index.html">退出</a></div>
     <main>
       <!-- Hero Section -->
       <section class="hero">
@@ -467,22 +474,22 @@
         <a href="apps.html">全部应用</a>
       </div>
       <div class="apps">
-        <a class="app" href="apps.html">
+        <a class="app" href="https://oa.internal.company.com" target="_blank" rel="noopener noreferrer">
           <span class="ico">OA</span>
           <span class="app-copy"><b>协同办公</b><em>审批、公告与日程</em></span>
           <span class="ext" aria-hidden="true">↗</span>
         </a>
-        <a class="app" href="apps.html">
+        <a class="app" href="https://mail.company.com" target="_blank" rel="noopener noreferrer">
           <span class="ico">邮</span>
           <span class="app-copy"><b>企业邮箱</b><em>收发内部邮件</em></span>
           <span class="ext" aria-hidden="true">↗</span>
         </a>
-        <a class="app" href="apps.html">
+        <a class="app" href="https://hr.company.com" target="_blank" rel="noopener noreferrer">
           <span class="ico">HR</span>
           <span class="app-copy"><b>人事自助</b><em>假期、证明与档案</em></span>
           <span class="ext" aria-hidden="true">↗</span>
         </a>
-        <a class="app" href="apps.html">
+        <a class="app" href="https://finance.company.com" target="_blank" rel="noopener noreferrer">
           <span class="ico">财</span>
           <span class="app-copy"><b>财务报销</b><em>提交与查询报销</em></span>
           <span class="ext" aria-hidden="true">↗</span>

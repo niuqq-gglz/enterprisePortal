@@ -97,85 +97,64 @@
       outline: 2px solid #bfdbfe;
       border-color: var(--blue);
     }
-    .code-row { display: flex; gap: 8px; margin-top: 8px; }
-    .code-row input { margin-top: 0; }
-    .code-row button {
-      flex: 0 0 auto;
+    .altcha {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       height: 46px;
+      margin: 2px 0 16px;
       padding: 0 14px;
+      border: 1px solid #cbd5e1;
       border-radius: 12px;
-      border: 1px solid var(--line);
       background: #f8fafc;
       color: var(--ink);
-      font: inherit;
       font-size: 13px;
       font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
     }
-    .code-row button:hover { background: #f1f5f9; }
-    .note, .error { min-height: 18px; margin: 0 0 8px; font-size: 12px; line-height: 1.5; }
-    .note { color: var(--muted); }
-    .error { color: #b91c1c; }
-    .back {
-      display: inline-block;
+    .altcha .box {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 4px;
+      background: #fff;
+      flex: 0 0 auto;
+    }
+    .hint { margin: 0 0 16px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .hint a { color: var(--blue); text-decoration: none; }
+    .links {
+      display: flex;
+      justify-content: space-between;
       margin-top: 16px;
+    }
+    .links a {
       color: var(--muted);
       font-size: 13px;
       text-decoration: none;
     }
-    .back:hover { color: var(--ink); }
+    .links a:hover { color: var(--ink); }
   </style>
 </head>
 <body>
   <div class="frame">
     <main>
-      <form class="card" id="login-form">
+      <form class="card" action="homepage-mockup.html">
         <h1>使用企业邮箱登录</h1>
         <label>企业邮箱
-          <input type="email" name="email" autocomplete="username" placeholder="name@company.com" required />
+          <input type="email" placeholder="name@ggquanta.com" />
         </label>
-        <label>验证码
-          <span class="code-row">
-            <input name="code" inputmode="numeric" maxlength="6" placeholder="6 位验证码" autocomplete="one-time-code" />
-            <button type="button" id="send-code">获取验证码</button>
-          </span>
+        <label>密码
+          <input type="password" placeholder="请输入密码" />
         </label>
-        <p class="note" id="code-note">原型演示填写邮箱后即可登录。</p>
-        <p class="error" id="form-error" role="alert"></p>
-        <button class="login-btn wide" type="submit">登录</button>
-        <a class="back" href="index.html">返回首页</a>
+        <div class="altcha"><span class="box"></span>点击完成人机验证</div>
+        <p class="hint">仅接受 @ggquanta.com</p>
+        <a class="login-btn wide" href="homepage-mockup.html">登录</a>
+        <div class="links">
+          <a href="index.html">返回首页</a>
+          <a href="register.html">注册账号</a>
+          <a href="password.html">修改密码</a>
+        </div>
       </form>
     </main>
   </div>
-  <script>
-    const form = document.getElementById("login-form");
-    const note = document.getElementById("code-note");
-    const error = document.getElementById("form-error");
-
-    function validEmail(value) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    }
-
-    document.getElementById("send-code").addEventListener("click", () => {
-      const email = form.email.value.trim();
-      error.textContent = "";
-      if (!validEmail(email)) {
-        note.textContent = "请先填写有效的企业邮箱。";
-        return;
-      }
-      note.textContent = "验证码已发到 " + email + "。原型演示可直接点击登录。";
-    });
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const email = form.email.value.trim();
-      if (!validEmail(email)) {
-        error.textContent = "请输入有效的企业邮箱。";
-        return;
-      }
-      location.href = "homepage-mockup.html";
-    });
-  </script>
 </body>
 </html>
