@@ -21,7 +21,7 @@
     html, body { margin: 0; padding: 0; }
     body {
       width: 1600px;
-      height: 1408px;
+      height: 1288px;
       overflow: hidden;
       background: var(--canvas);
       color: var(--ink);
@@ -55,7 +55,7 @@
       color: #fff;
     }
 
-    .wx-chip, .brand, .leave {
+    .corp, .leave {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -71,24 +71,31 @@
       font-weight: 560;
       letter-spacing: 0.01em;
     }
-    .brand { padding-left: 8px; gap: 10px; font-weight: 600; letter-spacing: 0.02em; }
+    .corp {
+      height: 40px;
+      padding: 0 16px 0 6px;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .corp img {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
+    .corp-dot {
+      opacity: 0.55;
+      font-weight: 400;
+    }
+    .corp-product {
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      opacity: 0.92;
+    }
     .leave { padding: 0 14px; font-weight: 500; }
     .brand-lockup { display: flex; align-items: center; gap: 10px; }
     .who { font-size: 13px; font-weight: 500; }
-    .mark {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      background: #fff;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      padding: 4px;
-    }
-    .mark i { display: block; border-radius: 1px; background: #1a56b0; }
-    .mark i:nth-child(2) { background: #7eb0e8; }
-    .mark i:nth-child(3) { background: #d7e6f8; }
-    .mark i:nth-child(4) { background: #12325c; }
 
     .hero-copy {
       position: absolute;
@@ -165,11 +172,11 @@
     }
 
     .bento {
-      height: 936px;
+      height: 816px;
       margin: -120px 40px 0;
       display: grid;
-      grid-template-columns: 360px minmax(0, 1fr) 392px;
-      grid-template-rows: 300px 212px 392px;
+      grid-template-columns: 420px minmax(0, 1fr) 392px;
+      grid-template-rows: 300px 92px 392px;
       gap: 16px;
       position: relative;
     }
@@ -301,19 +308,22 @@
       overflow: hidden;
       min-height: 0;
     }
-    .news-photo {
+    .slide {
       position: absolute;
       inset: 0;
-      background: #1c2836 url("assets/news.jpg") center 36% / cover no-repeat;
+      opacity: 0;
+      background: #1c2836 center 42% / cover no-repeat;
+      transition: opacity 0.45s ease;
     }
-    .news-photo .veil {
+    .slide.is-on { opacity: 1; z-index: 1; }
+    .slide .veil {
       position: absolute;
       inset: 0;
       background: linear-gradient(180deg, rgba(10, 16, 28, 0.5) 0%, rgba(10, 16, 28, 0.08) 32%, rgba(10, 16, 28, 0.08) 48%, rgba(10, 16, 28, 0.82) 100%);
     }
     .news-top {
       position: absolute;
-      z-index: 1;
+      z-index: 2;
       top: 16px;
       left: 20px;
       right: 20px;
@@ -339,8 +349,31 @@
       position: absolute;
       left: 22px;
       right: 22px;
-      bottom: 16px;
+      bottom: 40px;
       color: #fff;
+    }
+    .dots {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+    .dots button {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.45);
+      cursor: pointer;
+    }
+    .dots button.is-on {
+      width: 18px;
+      background: #fff;
     }
     .news-cap .kicker {
       margin: 0;
@@ -358,7 +391,50 @@
       letter-spacing: 0.01em;
       text-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
-    /* Apps */
+    /* Frosted tiles sit on a tinted wash so the blur has something to catch. */
+    .apps, .notices, .files {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(240px 180px at 0% 0%, rgba(255, 255, 255, 0.9), transparent 64%),
+        radial-gradient(460px 320px at 108% 112%, rgba(126, 170, 216, 0.5), transparent 70%),
+        radial-gradient(280px 220px at 0% 108%, rgba(176, 206, 232, 0.55), transparent 72%),
+        linear-gradient(168deg, #f6f9fc 0%, #e3edf6 100%);
+    }
+    .apps::before, .notices::before, .files::before {
+      content: "";
+      position: absolute;
+      inset: 18% -8% -20% 20%;
+      background:
+        radial-gradient(closest-side at 70% 40%, rgba(255, 255, 255, 0.7), transparent 72%),
+        radial-gradient(closest-side at 20% 80%, rgba(148, 186, 224, 0.45), transparent 70%);
+      filter: blur(6px);
+      pointer-events: none;
+    }
+    .apps > *, .notices > *, .files > * { position: relative; z-index: 1; }
+
+    .glass {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.58) 0%, rgba(255, 255, 255, 0.22) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 0 rgba(150, 176, 204, 0.28),
+        0 10px 22px rgba(28, 56, 92, 0.07);
+      backdrop-filter: blur(18px) saturate(1.5);
+      -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    }
+    .glass::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 38%);
+      pointer-events: none;
+    }
+
+    /* Apps — 3-column tiles, icon above name and description */
     .apps {
       grid-column: 1;
       grid-row: 2 / 4;
@@ -369,38 +445,53 @@
     .apps-grid {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: repeat(5, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(3, 1fr);
+      gap: 10px;
       min-height: 0;
     }
     .app {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      padding: 0 10px;
-      border-radius: 14px;
-      background: #f4f7fb;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 6px 12px;
+      border-radius: 16px;
       min-width: 0;
       color: inherit;
       text-decoration: none;
+      text-align: center;
     }
     .glyph {
+      position: relative;
+      z-index: 1;
       width: 36px;
       height: 36px;
       border-radius: 11px;
       display: grid;
       place-items: center;
       flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
     }
-    .app b { display: block; font-size: 13.5px; font-weight: 630; letter-spacing: 0.01em; }
-    .app em {
+    .app b {
+      position: relative;
+      z-index: 1;
       display: block;
-      margin-top: 2px;
+      font-size: 13px;
+      font-weight: 630;
+      letter-spacing: 0.01em;
+      line-height: 1.25;
+    }
+    .app em {
+      position: relative;
+      z-index: 1;
+      display: block;
+      margin-top: 3px;
       font-style: normal;
       color: var(--muted);
-      font-size: 11.5px;
-      white-space: nowrap;
+      font-size: 11px;
+      line-height: 1.35;
     }
     .g1 { background: #e7eef8; color: #1e3a5f; }
     .g2 { background: #e5f2fb; color: #185a9a; }
@@ -435,15 +526,18 @@
       grid-template-columns: 52px minmax(0, 1fr);
       gap: 12px;
       align-items: center;
-      padding: 0 12px;
+      padding: 0 14px;
       border-radius: 16px;
-      background: #f4f7fb;
     }
     .n-date {
+      position: relative;
+      z-index: 1;
       width: 52px;
       height: 52px;
       border-radius: 14px;
-      background: #f4f7fb;
+      background: rgba(255, 255, 255, 0.46);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -459,18 +553,23 @@
     .n-date span { margin-top: 2px; font-size: 11px; color: var(--muted); }
     .n-copy { min-width: 0; }
     .pin {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       height: 18px;
       padding: 0 6px;
       margin-bottom: 4px;
       border-radius: 999px;
-      background: #e8f0fb;
+      background: rgba(26, 86, 176, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       color: #1a56b0;
       font-size: 11px;
       font-weight: 640;
     }
     .n strong {
+      position: relative;
+      z-index: 1;
       display: block;
       font-size: 14.5px;
       font-weight: 620;
@@ -494,7 +593,6 @@
       min-height: 0;
     }
     .file {
-      background: #f4f7fb;
       border-radius: 16px;
       padding: 0 14px;
       display: flex;
@@ -503,7 +601,10 @@
       gap: 12px;
       min-width: 0;
     }
+    .file > div { position: relative; z-index: 1; min-width: 0; }
     .badge {
+      position: relative;
+      z-index: 1;
       width: 44px;
       height: 44px;
       border-radius: 12px;
@@ -514,6 +615,7 @@
       font-weight: 750;
       letter-spacing: 0.03em;
       color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
     }
     .badge.doc { background: #1d4e89; }
     .badge.xls { background: #157a45; }
@@ -621,7 +723,7 @@
     .day.work .num { color: var(--ink); }
     .day.today .num { background: var(--blue-deep); color: #fff; font-weight: 680; }
     .day.out { opacity: 0.38; }
-    .mark {
+    .flag {
       position: absolute;
       top: 2px;
       right: 3px;
@@ -630,24 +732,19 @@
       color: #5b8def;
       line-height: 1;
     }
-    .mark.work { color: #e25a24; }
+    .flag.work { color: #e25a24; }
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="top">
-      <div class="wx-chip">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <circle cx="7" cy="7" r="3" fill="#FFE08A"/>
-          <path d="M11.2 11.6h.2a2.2 2.2 0 0 0 .1-4.4 3.4 3.4 0 0 0-6.5-1.1A2.5 2.5 0 0 0 5.2 11.6h6z" fill="#fff"/>
-        </svg>
-        <span>北京 19°C</span>
+      <div class="corp" aria-label="中科国光量子科技有限公司 · 企业员工门户">
+        <img src="assets/logo.png" alt="" width="30" height="30">
+        <span>中科国光量子</span>
+        <span class="corp-dot" aria-hidden="true">·</span>
+        <span class="corp-product">企业员工门户</span>
       </div>
       <div class="brand-lockup">
-        <div class="brand">
-          <span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          企业员工门户
-        </div>
         <span class="who">name@ggquanta.com</span>
         <a class="leave" href="../index.html">退出</a>
       </div>
@@ -660,7 +757,7 @@
           <circle cx="8" cy="8" r="5.25" stroke="#98a4b3" stroke-width="1.6"/>
           <path d="M12.2 12.2 15.5 15.5" stroke="#98a4b3" stroke-width="1.6" stroke-linecap="round"/>
         </svg>
-        <span class="ph">搜索应用、制度、模板、业务和常见问题</span>
+        <span class="ph">搜索应用、资料、新闻和公告</span>
         <span class="go" aria-hidden="true">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
             <circle cx="8" cy="8" r="5.25" stroke="#fff" stroke-width="1.7"/>
@@ -737,17 +834,36 @@
       <div class="forecast-btn">查看完整预报</div>
     </section>
 
-    <section class="card news">
-      <div class="news-photo" role="img" aria-label="北京办公区">
-        <div class="news-top">
-          <h2>新闻</h2>
-          <a href="#">查看全部</a>
-        </div>
+    <section class="card news" aria-roledescription="carousel" aria-label="新闻">
+      <div class="news-top">
+        <h2>新闻</h2>
+        <a href="../news.html">查看全部</a>
+      </div>
+      <article class="slide is-on" style="background-image:url('assets/news.jpg')">
         <div class="veil"></div>
         <div class="news-cap">
           <p class="kicker">10月13日</p>
           <h3>2026 全员协同新体验<br>静态企业门户正式上线</h3>
         </div>
+      </article>
+      <article class="slide" style="background-image:url('../images/news/chip.jpg')">
+        <div class="veil"></div>
+        <div class="news-cap">
+          <p class="kicker">10月8日</p>
+          <h3>真空噪声量子随机数芯片<br>完成金融行业试点验收</h3>
+        </div>
+      </article>
+      <article class="slide" style="background-image:url('../images/news/hall.jpg')">
+        <div class="veil"></div>
+        <div class="news-cap">
+          <p class="kicker">10月6日</p>
+          <h3>秋季技术开放日<br>定于 10 月 24 日举行</h3>
+        </div>
+      </article>
+      <div class="dots">
+        <button type="button" class="is-on" aria-label="第 1 条新闻"></button>
+        <button type="button" aria-label="第 2 条新闻"></button>
+        <button type="button" aria-label="第 3 条新闻"></button>
       </div>
     </section>
 
@@ -757,16 +873,15 @@
         <a href="../apps.html">全部应用</a>
       </div>
       <div class="apps-grid">
-        <a class="app" href="https://oa.internal.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g1"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.2" y="3" width="13.6" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2.2 7h13.6M6.2 3v4" stroke="currentColor" stroke-width="1.4"/></svg></span><span><b>协同办公</b><em>审批、公告与日程</em></span></a>
-        <a class="app" href="https://mail.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g2"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M3 5.2 9 10l6-4.8" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span><b>企业邮箱</b><em>收发内部邮件</em></span></a>
-        <a class="app" href="https://hr.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g3"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.2" r="2.4" stroke="currentColor" stroke-width="1.4"/><path d="M3.8 14.2c.7-2.4 2.6-3.6 5.2-3.6s4.5 1.2 5.2 3.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>人事自助</b><em>假期、证明与档案</em></span></a>
-        <a class="app" href="https://finance.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g4"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.4" y="4" width="13.2" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2.4 7.5h13.2M5 11.2h3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>财务报销</b><em>提交与查询报销</em></span></a>
-        <a class="app" href="https://hr.company.com/attendance" target="_blank" rel="noopener noreferrer"><span class="glyph g5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.2" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v3.2l2.2 1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>考勤假勤</b><em>打卡与请假</em></span></a>
-        <a class="app" href="https://meeting.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g6"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 15h4M6.2 7.4 9 9.2l2.8-1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>云会议</b><em>发起与加入会议</em></span></a>
-        <a class="app" href="https://drive.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g7"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2.4 6.4h4.1l1.3 1.5h7.8V14.2H2.4V6.4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span><b>企业云盘</b><em>文件与共享</em></span></a>
-        <a class="app" href="https://vpn.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g8"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="4" y="8" width="10" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 8V6.2a2.8 2.8 0 0 1 5.6 0V8" stroke="currentColor" stroke-width="1.4"/></svg></span><span><b>安全 VPN</b><em>远程接入内网</em></span></a>
-        <a class="app" href="https://travel.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g9"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9.4h5.1L9 3.8l1.2 5.6H16l-1.7 2H10.1L9.2 15l-1.1-3.6H2.6L2 9.4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></span><span><b>商旅出行</b><em>出差订票与酒店</em></span></a>
-        <a class="app" href="https://docs.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g10"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 2.8h5.2L14 6.6V15.2H5V2.8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 2.8V6.8h4M7.2 9.4h4.2M7.2 12h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>云文档</b><em>在线协作编辑</em></span></a>
+        <a class="app glass" href="https://oa.internal.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g1"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.2" y="3" width="13.6" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2.2 7h13.6M6.2 3v4" stroke="currentColor" stroke-width="1.4"/></svg></span><span><b>协同办公</b><em>审批、公告与日程</em></span></a>
+        <a class="app glass" href="https://mail.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g2"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M3 5.2 9 10l6-4.8" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span><b>企业邮箱</b><em>收发内部邮件</em></span></a>
+        <a class="app glass" href="https://hr.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g3"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6.2" r="2.4" stroke="currentColor" stroke-width="1.4"/><path d="M3.8 14.2c.7-2.4 2.6-3.6 5.2-3.6s4.5 1.2 5.2 3.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>人事自助</b><em>假期、证明与档案</em></span></a>
+        <a class="app glass" href="https://finance.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g4"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.4" y="4" width="13.2" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2.4 7.5h13.2M5 11.2h3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>财务报销</b><em>提交与查询报销</em></span></a>
+        <a class="app glass" href="https://hr.company.com/attendance" target="_blank" rel="noopener noreferrer"><span class="glyph g5"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.2" stroke="currentColor" stroke-width="1.4"/><path d="M9 6v3.2l2.2 1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span><b>考勤假勤</b><em>打卡与请假</em></span></a>
+        <a class="app glass" href="https://meeting.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g6"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 15h4M6.2 7.4 9 9.2l2.8-1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>云会议</b><em>发起与加入会议</em></span></a>
+        <a class="app glass" href="https://drive.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g7"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2.4 6.4h4.1l1.3 1.5h7.8V14.2H2.4V6.4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span><b>企业云盘</b><em>文件与共享</em></span></a>
+        <a class="app glass" href="https://vpn.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g8"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="4" y="8" width="10" height="6.5" rx="1.4" stroke="currentColor" stroke-width="1.4"/><path d="M6.2 8V6.2a2.8 2.8 0 0 1 5.6 0V8" stroke="currentColor" stroke-width="1.4"/></svg></span><span><b>安全 VPN</b><em>远程接入内网</em></span></a>
+        <a class="app glass" href="https://travel.company.com" target="_blank" rel="noopener noreferrer"><span class="glyph g9"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9.4h5.1L9 3.8l1.2 5.6H16l-1.7 2H10.1L9.2 15l-1.1-3.6H2.6L2 9.4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></span><span><b>商旅出行</b><em>出差订票与酒店</em></span></a>
       </div>
     </section>
 
@@ -776,18 +891,18 @@
         <a href="#">查看全部</a>
       </div>
       <div class="n-list">
-        <div class="n">
+        <div class="n glass">
           <div class="n-date"><b>14</b><span>10月</span></div>
           <div class="n-copy">
             <span class="pin">置顶</span>
             <strong>关于规范物资收货验收工作的通知</strong>
           </div>
         </div>
-        <div class="n">
+        <div class="n glass">
           <div class="n-date"><b>10</b><span>10月</span></div>
           <div class="n-copy"><strong>关于进行有害生物防制作业的通知</strong></div>
         </div>
-        <div class="n">
+        <div class="n glass">
           <div class="n-date"><b>08</b><span>10月</span></div>
           <div class="n-copy"><strong>关于园区外墙清洗的通知</strong></div>
         </div>
@@ -800,10 +915,10 @@
         <a href="#">查看全部</a>
       </div>
       <div class="file-grid">
-        <div class="file"><span class="badge doc">DOC</span><div><b>员工手册</b><span>人力资源部 · v3.2</span></div></div>
-        <div class="file"><span class="badge xls">XLS</span><div><b>报销模板</b><span>财务部 · v1.8</span></div></div>
-        <div class="file"><span class="badge doc">DOC</span><div><b>差旅标准</b><span>行政部 · v2.1</span></div></div>
-        <div class="file"><span class="badge doc">DOC</span><div><b>品牌视觉规范</b><span>品牌与市场部 · v1.0</span></div></div>
+        <div class="file glass"><span class="badge doc">DOC</span><div><b>员工手册</b><span>人力资源部 · v3.2</span></div></div>
+        <div class="file glass"><span class="badge xls">XLS</span><div><b>报销模板</b><span>财务部 · v1.8</span></div></div>
+        <div class="file glass"><span class="badge doc">DOC</span><div><b>差旅标准</b><span>行政部 · v2.1</span></div></div>
+        <div class="file glass"><span class="badge doc">DOC</span><div><b>品牌视觉规范</b><span>品牌与市场部 · v1.0</span></div></div>
       </div>
     </section>
 
@@ -823,17 +938,17 @@
         <div class="day out"><span class="num">28</span><span class="sub">十八</span></div>
         <div class="day out"><span class="num">29</span><span class="sub">十九</span></div>
         <div class="day out"><span class="num">30</span><span class="sub">二十</span></div>
-        <div class="day off"><span class="mark">休</span><span class="num">1</span><span class="sub fest">国庆</span></div>
-        <div class="day off"><span class="mark">休</span><span class="num">2</span><span class="sub">廿二</span></div>
-        <div class="day off weekend"><span class="mark">休</span><span class="num">3</span><span class="sub">廿三</span></div>
-        <div class="day off weekend"><span class="mark">休</span><span class="num">4</span><span class="sub">廿四</span></div>
+        <div class="day off"><span class="flag">休</span><span class="num">1</span><span class="sub fest">国庆</span></div>
+        <div class="day off"><span class="flag">休</span><span class="num">2</span><span class="sub">廿二</span></div>
+        <div class="day off weekend"><span class="flag">休</span><span class="num">3</span><span class="sub">廿三</span></div>
+        <div class="day off weekend"><span class="flag">休</span><span class="num">4</span><span class="sub">廿四</span></div>
 
-        <div class="day off"><span class="mark">休</span><span class="num">5</span><span class="sub">廿五</span></div>
-        <div class="day off"><span class="mark">休</span><span class="num">6</span><span class="sub">廿六</span></div>
-        <div class="day off"><span class="mark">休</span><span class="num">7</span><span class="sub">廿七</span></div>
+        <div class="day off"><span class="flag">休</span><span class="num">5</span><span class="sub">廿五</span></div>
+        <div class="day off"><span class="flag">休</span><span class="num">6</span><span class="sub">廿六</span></div>
+        <div class="day off"><span class="flag">休</span><span class="num">7</span><span class="sub">廿七</span></div>
         <div class="day"><span class="num">8</span><span class="sub term">寒露</span></div>
         <div class="day"><span class="num">9</span><span class="sub">廿九</span></div>
-        <div class="day work"><span class="mark work">班</span><span class="num">10</span><span class="sub">初一</span></div>
+        <div class="day work"><span class="flag work">班</span><span class="num">10</span><span class="sub">初一</span></div>
         <div class="day weekend"><span class="num">11</span><span class="sub">初二</span></div>
 
         <div class="day"><span class="num">12</span><span class="sub">初三</span></div>
@@ -862,5 +977,31 @@
       </div>
     </section>
   </main>
+  <script>
+    (function () {
+      var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+      var dots = Array.prototype.slice.call(document.querySelectorAll(".dots button"));
+      var index = 0;
+      var timer;
+      function show(next) {
+        index = (next + slides.length) % slides.length;
+        slides.forEach(function (slide, i) { slide.classList.toggle("is-on", i === index); });
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle("is-on", i === index);
+          if (i === index) dot.setAttribute("aria-current", "true");
+          else dot.removeAttribute("aria-current");
+        });
+      }
+      function start() {
+        clearInterval(timer);
+        timer = setInterval(function () { show(index + 1); }, 5000);
+      }
+      dots.forEach(function (dot, i) {
+        dot.addEventListener("click", function () { show(i); start(); });
+      });
+      show(0);
+      start();
+    })();
+  </script>
 </body>
 </html>
