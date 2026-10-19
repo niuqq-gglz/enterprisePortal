@@ -1,6 +1,7 @@
 /**
  * 企业员工门户 - 新闻公告数据
- * 对应方案 6.6：新闻与公告分开展示，各自只维护一条详情。
+ * 对应方案 6.4 / 6.5：新闻与公告分开展示。
+ * level 为 public 的新闻可在登录前展示；未标注的新闻仅登录后可见。
  */
 
 window.PORTAL_NEWS = [
@@ -25,6 +26,7 @@ window.PORTAL_NEWS = [
   },
   {
     id: "NEWS-2026-012",
+    level: "public",
     title: "真空噪声量子随机数芯片完成金融行业试点验收",
     summary: "试点批次于 10 月 8 日完成验收。范围包括出厂测试记录、接口说明和现场运行日志，不包含客户业务数据。",
     publishAt: "2026-10-08",
@@ -32,7 +34,7 @@ window.PORTAL_NEWS = [
     cover: "images/news/chip.jpg",
     coverAlt: "电路板上的芯片近景",
     coverCaption: "量子随机数芯片所在电路",
-    relatedIds: ["NEWS-2026-010", "NEWS-2026-009", "NEWS-2026-008"],
+    relatedIds: ["NEWS-2026-010", "NEWS-2026-007", "NEWS-2026-009"],
     body: [
       { type: "p", text: "真空噪声量子随机数芯片的金融行业试点，已于 10 月 8 日完成验收。试点自 8 月启动，由产品与解决方案部牵头，制造与工艺部提供批次测试记录。" },
       { type: "p", text: "验收核对了三部分材料：出厂测试记录、对外接口说明，以及试点期间的运行日志。日志只记录设备状态和调用次数，不包含客户侧业务数据。验收结论已写入项目档案，编号见协同办公中的试点结项单。" },
@@ -67,6 +69,7 @@ window.PORTAL_NEWS = [
   },
   {
     id: "NEWS-2026-010",
+    level: "public",
     title: "量子密钥分发设备完成省级电力试点接入",
     summary: "试点链路于 9 月 16 日完成接入测试。公司负责设备、接口和值守说明，电力业务系统仍由客户运维。",
     publishAt: "2026-09-18",
@@ -74,7 +77,7 @@ window.PORTAL_NEWS = [
     cover: "images/news/power.jpg",
     coverAlt: "日落时分的输电线路与铁塔",
     coverCaption: "试点所在区域的输电线路",
-    relatedIds: ["NEWS-2026-012", "NEWS-2026-009", "NEWS-2026-013"],
+    relatedIds: ["NEWS-2026-012", "NEWS-2026-007", "NEWS-2026-009"],
     body: [
       { type: "p", text: "量子密钥分发设备与一家省级电力公司调度相关链路的试点接入，已于 9 月 16 日完成。量子通信事业部 9 月 18 日确认测试记录归档。" },
       { type: "p", text: "本次接入只验证密钥分发设备与客户指定接口的连通和稳定性。电力业务系统的配置、权限和运行数据由客户自行维护，公司人员不登录客户业务系统。" },
@@ -123,6 +126,7 @@ window.PORTAL_NEWS = [
   },
   {
     id: "NEWS-2026-007",
+    level: "public",
     title: "2027 届校园招聘宣讲安排",
     summary: "宣讲从 11 月 3 日开始，覆盖北京、合肥、上海三场。岗位说明和简历投递入口由人力资源部在协同办公发布，本页不接收简历。",
     publishAt: "2026-08-28",
@@ -130,7 +134,7 @@ window.PORTAL_NEWS = [
     cover: "images/news/campus.jpg",
     coverAlt: "仰视的城市商务楼群",
     coverCaption: "宣讲所在城市",
-    relatedIds: ["NEWS-2026-011", "NEWS-2026-013", "NEWS-2026-008"],
+    relatedIds: ["NEWS-2026-012", "NEWS-2026-010", "NEWS-2026-011"],
     body: [
       { type: "p", text: "人力资源部公布 2027 届校园招聘宣讲安排。对象为在校学生，员工可把日程转给符合岗位条件的同学。简历不通过门户收取。" },
       { type: "ul", items: [

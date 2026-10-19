@@ -9,632 +9,501 @@
       --bg: #f8fafc;
       --card: #ffffff;
       --ink: #0f172a;
-      --body: #475569;
+      --body: #334155;
       --muted: #64748b;
       --faint: #94a3b8;
-      --line: #edf2f7;
-      --line-subtle: #f1f5f9;
-      --blue: #2563eb;
-      --blue-soft: #eff6ff;
-      --shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 6px 16px rgba(15, 23, 42, 0.03);
-      --shadow-hover: 0 12px 28px -4px rgba(15, 23, 42, 0.08);
-      --login-grad: linear-gradient(105deg, #24143f 0%, #5c2a78 46%, #ef6b3a 100%);
+      --line: #e2e8f0;
+      --blue: #1d4ed8;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
-
     * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden; /* Strict Single-Screen Mode */
-    }
-
+    html, body { margin: 0; padding: 0; }
     body {
-      background: #eef2f6;
+      background: var(--bg);
       color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
     }
-
+    :focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
     .frame {
-      width: 1440px;
-      max-width: 100%;
-      height: 100vh;
-      max-height: 100vh;
-      margin: 0 auto;
-      background: #ffffff;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
       position: relative;
-      background-image: 
-        radial-gradient(circle at 12% 16%, rgba(239, 107, 58, 0.04), transparent 35%),
-        radial-gradient(circle at 88% 20%, rgba(92, 42, 120, 0.04), transparent 40%),
-        radial-gradient(circle at 50% 85%, rgba(37, 99, 235, 0.03), transparent 50%);
+      width: 100%;
+      margin: 0 auto;
+      background: var(--bg);
+      min-height: 100vh;
     }
-
-    .btn-login {
-      height: 38px;
+    .account {
+      position: absolute;
+      top: 28px;
+      right: 40px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .leave {
+      color: var(--muted);
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .leave:hover { color: var(--ink); }
+    .enter {
+      height: 32px;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 0 20px;
-      border: 0;
+      padding: 0 14px;
       border-radius: 999px;
-      background: var(--login-grad);
-      color: #ffffff;
+      background: var(--ink);
+      color: #fff;
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.01em;
       text-decoration: none;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 18px -2px rgba(92, 42, 120, 0.25);
-      cursor: pointer;
-      transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
     }
-
-    .btn-login:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 22px -2px rgba(92, 42, 120, 0.35);
-    }
-
-    /* Main Grid Layout (Single-Screen In-View Fit) */
+    .enter:hover { filter: brightness(1.08); }
     main {
-      flex: 1;
-      min-height: 0; /* Important: allow height shrink to fit in viewport */
-      display: grid;
-      grid-template-columns: 1.14fr 0.86fr;
-      padding: 36px 48px 36px;
-      gap: 48px;
-      align-items: stretch;
-      overflow: hidden;
+      width: min(1200px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 36px 0 48px;
     }
-
-    /* Left Column */
-    .left-col {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      padding-right: 12px;
-      min-height: 0;
-    }
-
-    .left-top {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      color: var(--body);
-      font-size: 13px;
-      font-weight: 600;
-      width: fit-content;
-      margin-bottom: 20px;
-    }
-
-    .badge-pill .spark {
-      color: #6366f1;
-      font-size: 14px;
-    }
-
-    .headline {
+    .hero { text-align: center; margin-bottom: 28px; }
+    .hello {
       margin: 0;
-      font-size: 48px;
-      line-height: 1.16;
-      letter-spacing: -0.035em;
-      font-weight: 800;
-      color: var(--ink);
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
     }
-
-    .serif-accent {
-      font-family: "Georgia", "Baskerville", "Songti SC", "Source Han Serif SC", serif;
-      font-style: italic;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      padding-right: 4px;
-    }
-
-    .description {
-      margin: 18px 0 0;
-      color: var(--body);
-      font-size: 15px;
-      line-height: 1.68;
-      max-width: 530px;
-    }
-
-    .cta-group {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-top: 28px;
-    }
-
-    .cta-group .btn-login {
-      height: 44px;
-      padding: 0 24px;
+    .date {
+      margin: 8px 0 20px;
+      color: var(--muted);
       font-size: 14px;
     }
-
-    .btn-secondary {
-      height: 44px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 22px;
+    .search {
+      width: 680px;
+      max-width: 100%;
+      margin: 0 auto;
+      height: 56px;
+      background: #fff;
       border: 1px solid #cbd5e1;
-      border-radius: 999px;
-      color: var(--ink);
-      background: #ffffff;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.18s ease;
-    }
-
-    .btn-secondary:hover {
-      background: #f8fafc;
-      border-color: #94a3b8;
-    }
-
-    /* 3 Portal Functional Capabilities */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: auto;
-      padding-top: 20px;
-    }
-
-    .feature-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
       border-radius: 16px;
-      padding: 18px 16px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      align-items: center;
+      padding: 6px 6px 6px 20px;
+      gap: 12px;
     }
-
-    .feature-card:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
-      transform: translateY(-2px);
+    .search input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      font-size: 15px;
+      color: var(--ink);
     }
-
-    .feature-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
+    .search input::placeholder { color: #94a3b8; }
+    .search input:focus { outline: none; }
+    .search:focus-within { border-color: #94a3b8; }
+    .search button {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
       display: grid;
       place-items: center;
-      font-size: 18px;
     }
-
-    .feature-icon.blue { background: #eff6ff; color: #2563eb; }
-    .feature-icon.purple { background: #faf5ff; color: #9333ea; }
-    .feature-icon.emerald { background: #ecfdf5; color: #059669; }
-
-    .feature-card h3 {
-      margin: 0;
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .feature-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    /* Right Column - Endless In-Screen Auto-scrolling News Showcase */
-    .right-col {
-      position: relative;
-      height: 100%;
-      min-height: 0;
-      overflow: hidden;
-      border-radius: 20px;
-      mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
-    }
-
-    .news-scroller {
+    .chips {
       display: flex;
-      flex-direction: column;
-      gap: 16px;
-      animation: verticalScroll 24s linear infinite;
-      will-change: transform;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
     }
-
-    .right-col:hover .news-scroller {
-      animation-play-state: paused;
-    }
-
-    @keyframes verticalScroll {
-      0% {
-        transform: translateY(0);
-      }
-      100% {
-        transform: translateY(calc(-50% - 8px));
-      }
-    }
-
-    .news-group {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .news-item {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 16px;
-      padding: 14px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 18px;
-      box-shadow: var(--shadow);
+    .chips a {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--body);
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 6px 14px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
       text-decoration: none;
-      color: inherit;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
     }
-
-    .news-item:hover {
-      border-color: #cbd5e1;
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .news-thumb {
-      width: 100%;
-      height: 120px;
+    .chips a:hover { border-color: #cbd5e1; color: var(--ink); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
       border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-      background: #e2e8f0;
-      flex-shrink: 0;
+      box-shadow: var(--shadow);
     }
-
-    .news-thumb svg {
+    .feature {
+      margin-top: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .feature-main {
+      display: grid;
+      grid-template-columns: 1.28fr 0.86fr;
+      min-height: 268px;
+    }
+    .feature-cover {
+      display: block;
+      min-height: 268px;
+      background: #e2e8f0;
+    }
+    .feature-cover img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
-
-    .news-content {
+    .feature-copy {
+      padding: 20px 24px 22px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding-right: 6px;
+      min-width: 0;
     }
-
-    .news-tag-row {
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .card-head h2 { margin: 0; font-size: 16px; font-weight: 650; }
+    .more {
+      color: var(--blue);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .spot-kicker {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .spot-title {
+      display: block;
+      margin: 8px 0 0;
+      font-size: 20px;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .spot-title:hover { color: var(--blue); }
+    .spot-sum {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .spot-link {
+      color: var(--blue);
+      font-size: 13px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 14px;
+    }
+    .feature-rest { border-top: 1px solid #f1f5f9; padding: 4px 24px 8px; }
+    .row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
+      gap: 12px;
+      padding: 14px 0;
+      color: inherit;
+      text-decoration: none;
     }
-
-    .news-tag {
-      font-size: 11px;
-      font-weight: 650;
-      letter-spacing: 0.02em;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      color: var(--body);
-    }
-
-    .news-tag.blue { background: #eff6ff; color: #1d4ed8; }
-    .news-tag.amber { background: #fef3c7; color: #b45309; }
-    .news-tag.purple { background: #f3e8ff; color: #7e22ce; }
-    .news-tag.green { background: #dcfce7; color: #15803d; }
-
-    .news-date {
-      color: var(--faint);
-      font-size: 12px;
-      font-weight: 500;
-    }
-
-    .news-title {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.4;
-      color: var(--ink);
-      letter-spacing: -0.015em;
-    }
-
-    .news-desc {
-      margin: 5px 0 0;
+    .row + .row { border-top: 1px solid #f1f5f9; }
+    a.row:hover strong { color: var(--blue); }
+    .row-main { min-width: 0; }
+    .row time { color: var(--muted); font-size: 12px; }
+    .row strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.45; }
+    .row em {
+      display: block;
+      margin-top: 4px;
       color: var(--muted);
+      font-style: normal;
       font-size: 12px;
       line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 332px;
+      gap: 16px;
+      margin-top: 16px;
+      align-items: stretch;
+    }
+    .card-weather {
+      padding: 18px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .wx-place {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .wx-temp {
+      margin: 8px 0 0;
+      font-size: 56px;
+      font-weight: 650;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+    }
+    .wx-temp span {
+      margin-left: 2px;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .wx-cond {
+      margin: 8px 0 0;
+      color: var(--body);
+      font-size: 14px;
+    }
+    .wx-meta {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .wx-days {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding-top: 18px;
+    }
+    .wx-days div { min-width: 0; }
+    .wx-days b, .wx-days span { display: block; }
+    .wx-days b { font-size: 13px; font-weight: 600; }
+    .wx-days .d { margin-bottom: 6px; color: var(--muted); font-size: 12px; font-weight: 500; }
+    .wx-days .lo { margin-top: 2px; color: var(--faint); font-size: 12px; font-weight: 500; }
+    .card-cal {
+      padding: 16px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 4px 2px;
+      gap: 8px;
+    }
+    .cal-nav h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .cal-actions { display: flex; align-items: center; gap: 8px; }
+    .cal-arrows { display: flex; gap: 2px; }
+    .cal-arrows button {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      border-radius: 8px;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      cursor: pointer;
+    }
+    .cal-arrows button:hover { background: #f1f5f9; }
+    .cal-arrows button:disabled { opacity: 0.3; cursor: default; }
+    .cal-week, .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+    .cal-week span {
+      text-align: center;
+      font-size: 12px;
+      color: #9aa3af;
+      font-weight: 500;
+      padding: 8px 0 4px;
+    }
+    .cal-week span.rest { color: #3b82f6; }
+    .cal-grid { grid-auto-rows: 46px; }
+    .day {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 3px;
+      min-width: 0;
+      color: var(--ink);
+    }
+    .day .num {
+      width: 24px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      font-size: 15px;
+      font-weight: 560;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .day .sub {
+      max-width: 100%;
+      margin-top: 1px;
+      padding: 0 1px;
       overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 10px;
+      line-height: 1.3;
+      color: #9aa3af;
+    }
+    .day .sub.fest { color: #64748b; }
+    .day.is-off .num,
+    .day.is-weekend .num { color: #3b82f6; }
+    .day.is-work .num { color: var(--ink); }
+    .day.is-today .num {
+      background: #2f7cf6;
+      color: #fff;
+      font-weight: 650;
+    }
+    .day.out .num,
+    .day.out .sub,
+    .day.out.is-off .num,
+    .day.out.is-weekend .num { color: #c5ced8; }
+    .day .mark {
+      position: absolute;
+      top: 0;
+      right: 1px;
+      font-size: 9px;
+      font-weight: 650;
+      line-height: 1;
+      color: #5b93f5;
+    }
+    .day .mark.work { color: #f25c2a; }
+    .day.out .mark { color: #c5ced8; }
+    @media (max-width: 900px) {
+      .account { right: 20px; }
+      .feature-main, .board { grid-template-columns: 1fr; }
+      .feature-cover { min-height: 200px; max-height: 240px; }
+      .feature-cover img { max-height: 240px; }
+      .wx-days { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     }
   </style>
 </head>
 <body>
   <div class="frame">
-    <!-- Main Section (Left Content + Right News Showcase in Single Viewport) -->
+    <div class="account">
+      <a class="leave" href="register.html">注册</a>
+      <a class="enter" href="login.html">登录</a>
+    </div>
     <main>
-      <!-- Left Column: Branding, Value Prop & Functional Capabilities -->
-      <section class="left-col">
-        <div class="left-top">
-          <div class="badge-pill">
-            <span class="spark">✦</span>
-            <span>统一入口 · 高效协同</span>
-          </div>
-
-          <h1 class="headline">
-            让工作更高效、<br />
-            <span class="serif-accent">更井然有序</span>
-          </h1>
-
-          <p class="description">
-            一站式企业内部系统接入，连接您的日常工作与核心资源。制度资料、常用系统、业务文档与最新资讯，触手可及。
-          </p>
-
-          <div class="cta-group">
-            <a class="btn-login" href="login.html">员工登录&nbsp; ↗</a>
-            <a class="btn-secondary" href="register.html">注册账号</a>
-            <a class="btn-secondary" href="https://example.com" target="_blank" rel="noreferrer">访问公司官网</a>
-          </div>
-        </div>
-
-        <!-- 3 Portal Functional Capabilities -->
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon blue">⚡</div>
-            <h3>应用中心</h3>
-            <p>高频协同办公与业务系统一键直达</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon purple">📑</div>
-            <h3>制度与资料</h3>
-            <p>权威规章规范、办事流程与常用模板速查</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon emerald">🧭</div>
-            <h3>入职与支持</h3>
-            <p>新员工起步指南与各部门服务支持渠道</p>
-          </div>
+      <section class="hero">
+        <h1 class="hello">早上好</h1>
+        <p class="date">2026年10月15日 · 星期四</p>
+        <form class="search" action="news.html" method="get" role="search">
+          <input type="hidden" name="guest" value="1" />
+          <input name="q" type="search" placeholder="搜索新闻" aria-label="搜索新闻" autocomplete="off" />
+          <button type="submit" aria-label="搜索">⌕</button>
+        </form>
+        <div class="chips">
+          <a href="news.html?guest=1&amp;q=量子随机数">量子随机数</a>
+          <a href="news.html?guest=1&amp;q=电力">电力试点</a>
+          <a href="news.html?guest=1&amp;q=校园招聘">校园招聘</a>
         </div>
       </section>
 
-      <!-- Right Column: Auto-scrolling News Showcase within Screen Viewport -->
-      <section class="right-col" id="news" aria-label="新闻动态">
-        <div class="news-scroller">
-          <!-- Primary News Group -->
-          <div class="news-group">
-            <!-- Item 1: Sustainability Report -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#1e293b"/>
-                      <stop offset="50%" stop-color="#334155"/>
-                      <stop offset="100%" stop-color="#0f172a"/>
-                    </linearGradient>
-                    <linearGradient id="g1-accent" x1="0" y1="1" x2="1" y2="0">
-                      <stop offset="0%" stop-color="#10b981" stop-opacity="0.8"/>
-                      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.3"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="180" height="120" fill="url(#g1)"/>
-                  <path d="M15 110 L60 25 L120 55 L165 15 L175 120 Z" fill="url(#g1-accent)" opacity="0.4"/>
-                  <circle cx="135" cy="40" r="24" fill="#38bdf8" opacity="0.25"/>
-                  <line x1="0" y1="80" x2="180" y2="80" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                  <rect x="25" y="35" width="70" height="45" rx="6" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag green">可持续发展报告</span>
-                  <span class="news-date">10.24</span>
-                </div>
-                <h2 class="news-title">2026 年度企业环境与可持续发展报告发布</h2>
-                <p class="news-desc">全面介绍公司在绿色运营、技术创新及社会责任领域的最新成果与未来规划。</p>
-              </div>
-            </article>
-
-            <!-- Item 2: Innovation Conference -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#1e1b4b"/>
-                      <stop offset="50%" stop-color="#312e81"/>
-                      <stop offset="100%" stop-color="#4338ca"/>
-                    </linearGradient>
-                    <linearGradient id="g2-glow" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.7"/>
-                      <stop offset="100%" stop-color="#fb923c" stop-opacity="0.8"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="180" height="120" fill="url(#g2)"/>
-                  <circle cx="90" cy="60" r="40" fill="url(#g2-glow)" opacity="0.6" filter="blur(8px)"/>
-                  <rect x="35" y="25" width="110" height="70" rx="10" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-                  <circle cx="90" cy="60" r="14" fill="#ffffff" opacity="0.9"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag purple">行业创新大会</span>
-                  <span class="news-date">10.20</span>
-                </div>
-                <h2 class="news-title">核心数字化产品亮相年度产业协同大会</h2>
-                <p class="news-desc">分享新一代企业信息架构与办公协同实践，获得业界广泛关注与好评。</p>
-              </div>
-            </article>
-
-            <!-- Item 3: Strategic Partnership -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#0f172a"/>
-                      <stop offset="100%" stop-color="#1e3a8a"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="180" height="120" fill="url(#g3)"/>
-                  <path d="M10 90 Q 55 35 90 65 T 170 25" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.8"/>
-                  <circle cx="55" cy="50" r="7" fill="#93c5fd"/>
-                  <circle cx="90" cy="65" r="9" fill="#3b82f6"/>
-                  <circle cx="135" cy="40" r="7" fill="#60a5fa"/>
-                  <rect x="20" y="20" width="140" height="80" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag blue">战略合作</span>
-                  <span class="news-date">10.15</span>
-                </div>
-                <h2 class="news-title">公司与行业领军合作伙伴签署战略协议</h2>
-                <p class="news-desc">双方将在企业数字化升级、联合解决方案及市场生态拓展展开深度合作。</p>
-              </div>
-            </article>
-
-            <!-- Item 4: CSR & Volunteering -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#14532d"/>
-                      <stop offset="100%" stop-color="#15803d"/>
-                    </linearGradient>
-                  </defs>
-                  <rect width="180" height="120" fill="url(#g4)"/>
-                  <circle cx="90" cy="60" r="34" fill="#86efac" opacity="0.3"/>
-                  <path d="M60 70 Q 90 40 120 70" fill="none" stroke="#ffffff" stroke-width="2.5"/>
-                  <circle cx="90" cy="48" r="9" fill="#ffffff"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag amber">社会责任</span>
-                  <span class="news-date">09.28</span>
-                </div>
-                <h2 class="news-title">2026 年度企业公益与青年志愿者行动</h2>
-                <p class="news-desc">践行企业公民责任，员工志愿者共同参与社区关怀与技术赋能计划。</p>
-              </div>
-            </article>
-          </div>
-
-          <!-- Clone News Group for Infinite Smooth Loop -->
-          <div class="news-group" aria-hidden="true">
-            <!-- Item 1 -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="180" height="120" fill="url(#g1)"/>
-                  <path d="M15 110 L60 25 L120 55 L165 15 L175 120 Z" fill="url(#g1-accent)" opacity="0.4"/>
-                  <circle cx="135" cy="40" r="24" fill="#38bdf8" opacity="0.25"/>
-                  <line x1="0" y1="80" x2="180" y2="80" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-                  <rect x="25" y="35" width="70" height="45" rx="6" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag green">可持续发展报告</span>
-                  <span class="news-date">10.24</span>
-                </div>
-                <h2 class="news-title">2026 年度企业环境与可持续发展报告发布</h2>
-                <p class="news-desc">全面介绍公司在绿色运营、技术创新及社会责任领域的最新成果与未来规划。</p>
-              </div>
-            </article>
-
-            <!-- Item 2 -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="180" height="120" fill="url(#g2)"/>
-                  <circle cx="90" cy="60" r="40" fill="url(#g2-glow)" opacity="0.6" filter="blur(8px)"/>
-                  <rect x="35" y="25" width="110" height="70" rx="10" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-                  <circle cx="90" cy="60" r="14" fill="#ffffff" opacity="0.9"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag purple">行业创新大会</span>
-                  <span class="news-date">10.20</span>
-                </div>
-                <h2 class="news-title">核心数字化产品亮相年度产业协同大会</h2>
-                <p class="news-desc">分享新一代企业信息架构与办公协同实践，获得业界广泛关注与好评。</p>
-              </div>
-            </article>
-
-            <!-- Item 3 -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="180" height="120" fill="url(#g3)"/>
-                  <path d="M10 90 Q 55 35 90 65 T 170 25" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.8"/>
-                  <circle cx="55" cy="50" r="7" fill="#93c5fd"/>
-                  <circle cx="90" cy="65" r="9" fill="#3b82f6"/>
-                  <circle cx="135" cy="40" r="7" fill="#60a5fa"/>
-                  <rect x="20" y="20" width="140" height="80" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag blue">战略合作</span>
-                  <span class="news-date">10.15</span>
-                </div>
-                <h2 class="news-title">公司与行业领军合作伙伴签署战略协议</h2>
-                <p class="news-desc">双方将在企业数字化升级、联合解决方案及市场生态拓展展开深度合作。</p>
-              </div>
-            </article>
-
-            <!-- Item 4 -->
-            <article class="news-item">
-              <div class="news-thumb">
-                <svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="180" height="120" fill="url(#g4)"/>
-                  <circle cx="90" cy="60" r="34" fill="#86efac" opacity="0.3"/>
-                  <path d="M60 70 Q 90 40 120 70" fill="none" stroke="#ffffff" stroke-width="2.5"/>
-                  <circle cx="90" cy="48" r="9" fill="#ffffff"/>
-                </svg>
-              </div>
-              <div class="news-content">
-                <div class="news-tag-row">
-                  <span class="news-tag amber">社会责任</span>
-                  <span class="news-date">09.28</span>
-                </div>
-                <h2 class="news-title">2026 年度企业公益与青年志愿者行动</h2>
-                <p class="news-desc">践行企业公民责任，员工志愿者共同参与社区关怀与技术赋能计划。</p>
-              </div>
-            </article>
+      <section class="card feature" aria-labelledby="news-heading">
+        <div class="feature-main">
+          <a class="feature-cover" href="news.html?guest=1&amp;id=NEWS-2026-012">
+            <img src="images/news/chip.jpg" alt="电路板上的芯片近景" />
+          </a>
+          <div class="feature-copy">
+            <div class="card-head">
+              <h2 id="news-heading">新闻</h2>
+              <a class="more" href="news.html?guest=1">查看全部</a>
+            </div>
+            <p class="spot-kicker">10月8日</p>
+            <a class="spot-title" href="news.html?guest=1&amp;id=NEWS-2026-012">真空噪声量子随机数芯片完成金融行业试点验收</a>
+            <p class="spot-sum">试点批次于 10 月 8 日完成验收。范围包括出厂测试记录、接口说明和现场运行日志，不包含客户业务数据。</p>
+            <a class="spot-link" href="news.html?guest=1&amp;id=NEWS-2026-012">阅读详情</a>
           </div>
         </div>
+        <div class="feature-rest">
+          <a class="row" href="news.html?guest=1&amp;id=NEWS-2026-010">
+            <span class="row-main">
+              <strong>量子密钥分发设备完成省级电力试点接入</strong>
+              <em>试点链路于 9 月 16 日完成接入测试。公司负责设备、接口和值守说明，电力业务系统仍由客户运维。</em>
+            </span>
+            <time datetime="2026-09-18">9月18日</time>
+          </a>
+          <a class="row" href="news.html?guest=1&amp;id=NEWS-2026-007">
+            <span class="row-main">
+              <strong>2027 届校园招聘宣讲安排</strong>
+              <em>宣讲从 11 月 3 日开始，覆盖北京、合肥、上海三场。本页不接收简历。</em>
+            </span>
+            <time datetime="2026-08-28">8月28日</time>
+          </a>
+        </div>
       </section>
+
+      <div class="board">
+        <section class="card card-weather" aria-labelledby="weather-heading">
+          <div class="card-head">
+            <h2 id="weather-heading">天气</h2>
+            <a class="more" href="weather.html?guest=1">查看全部</a>
+          </div>
+          <p class="wx-place">北京 · 门户配置城市</p>
+          <p class="wx-temp">19<span>°C</span></p>
+          <p class="wx-cond">晴间多云</p>
+          <p class="wx-meta">体感 17° · 湿度 46% · 东北风 2 级</p>
+          <div class="wx-days">
+            <div><span class="d">今天</span><b>19°</b><span class="lo">9°</span></div>
+            <div><span class="d">周五</span><b>18°</b><span class="lo">8°</span></div>
+            <div><span class="d">周六</span><b>15°</b><span class="lo">7°</span></div>
+            <div><span class="d">周日</span><b>16°</b><span class="lo">6°</span></div>
+            <div><span class="d">周一</span><b>20°</b><span class="lo">9°</span></div>
+          </div>
+        </section>
+
+        <section class="card card-cal" aria-labelledby="cal-heading">
+          <div class="cal-nav">
+            <h2 id="cal-heading">10月</h2>
+            <div class="cal-actions">
+              <a class="more" href="calendar.html?guest=1">查看全部</a>
+              <div class="cal-arrows">
+                <button type="button" id="cal-prev" aria-label="上个月">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M8.5 3.5 5 7l3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" id="cal-next" aria-label="下个月">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M5.5 3.5 9 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="cal-week" aria-hidden="true"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="rest">六</span><span class="rest">日</span></div>
+          <div id="cal-grid" class="cal-grid" role="grid"></div>
+        </section>
+      </div>
     </main>
   </div>
+  <script src="calendar.js"></script>
 </body>
 </html>

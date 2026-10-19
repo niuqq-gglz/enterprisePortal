@@ -176,7 +176,8 @@
       margin: -120px 40px 0;
       display: grid;
       grid-template-columns: 420px minmax(0, 1fr) 392px;
-      grid-template-rows: 300px 92px 392px;
+      /* 408 + 76 + 300，间隙 16：应用 500 在左上，天气 300 在左下；资料占原日历高，日历占原资料高 */
+      grid-template-rows: 408px 76px 300px;
       gap: 16px;
       position: relative;
     }
@@ -212,7 +213,7 @@
     /* Weather */
     .weather {
       grid-column: 1;
-      grid-row: 1;
+      grid-row: 3;
       position: relative;
       overflow: hidden;
       color: #fff;
@@ -303,7 +304,7 @@
     /* News */
     .news {
       grid-column: 2;
-      grid-row: 1 / 3;
+      grid-row: 1;
       position: relative;
       overflow: hidden;
       min-height: 0;
@@ -437,7 +438,7 @@
     /* Apps — 3-column tiles, icon above name and description */
     .apps {
       grid-column: 1;
-      grid-row: 2 / 4;
+      grid-row: 1 / 3;
       padding: 18px 16px 16px;
       display: flex;
       flex-direction: column;
@@ -507,7 +508,7 @@
     /* Notices */
     .notices {
       grid-column: 2;
-      grid-row: 3;
+      grid-row: 2 / 4;
       padding: 18px 18px 14px;
       display: flex;
       flex-direction: column;
@@ -579,7 +580,7 @@
     /* Files */
     .files {
       grid-column: 3;
-      grid-row: 3;
+      grid-row: 1;
       padding: 18px 16px 16px;
       display: flex;
       flex-direction: column;
@@ -640,7 +641,7 @@
     /* Calendar */
     .cal {
       grid-column: 3;
-      grid-row: 1 / 3;
+      grid-row: 2 / 4;
       padding: 16px 14px 12px;
       display: flex;
       flex-direction: column;

@@ -83,6 +83,23 @@ body {
   text-decoration: none;
 }
 .leave:hover { color: var(--ink); }
+.account-out { display: none; }
+.enter {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.enter:hover { filter: brightness(1.08); }
+html[data-guest="1"] .account-in,
+html[data-guest="1"] .footer-internal { display: none; }
+html[data-guest="1"] .account-out { display: flex; }
 
 main {
   width: 100%;

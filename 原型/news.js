@@ -4,6 +4,8 @@
   const isNoticePage = /notices\.html$/i.test(location.pathname);
   const NEWS = window.PORTAL_NEWS.slice().sort((a, b) => (a.publishAt < b.publishAt ? 1 : -1));
   const NOTICES = window.PORTAL_NOTICES.slice();
+  const isGuest = !isNoticePage && new URLSearchParams(location.search).get("guest") === "1";
+  const visibleNews = isGuest ? NEWS.filter((item) => item.level === "public") : NEWS;
   const view = document.getElementById("view");
 
   function esc(value) {
@@ -59,7 +61,9 @@
 
   function newsHref(extra) {
     const q = new URLSearchParams();
+    if (isGuest) q.set("guest", "1");
     if (extra.q) q.set("q", extra.q);
+    if (extra.id) q.set("id", extra.id);
     if (extra.page > 1) q.set("page", String(extra.page));
     const s = q.toString();
     return s ? `news.html?${s}` : "news.html";
@@ -105,7 +109,8 @@
     const here = current
       ? `<a href="${href}">${esc(section)}</a><span aria-hidden="true">/</span><span class="cur">${esc(current)}</span>`
       : `<span class="cur">${esc(section)}</span>`;
-    return `<nav class="crumbs" aria-label="面包屑"><a href="homepage-mockup.html">首页</a><span aria-hidden="true">/</span>${here}</nav>`;
+    const home = isGuest ? "index.html" : "homepage-mockup.html";
+    return `<nav class="crumbs" aria-label="面包屑"><a href="${home}">首页</a><span aria-hidden="true">/</span>${here}</nav>`;
   }
 
   function newsHead() {
@@ -115,7 +120,7 @@
           <h1>新闻</h1>
         </div>
         <div class="head-stats">
-          <span>共 ${NEWS.length} 条</span>
+          <span>共 ${visibleNews.length} 条${isGuest ? "已公开" : ""}</span>
         </div>
       </div>`;
   }
@@ -137,9 +142,10 @@
     const keyword = (q.get("q") || "").trim();
     const folded = keyword.toLowerCase();
 
-    const list = NEWS.filter((item) => {
+    const list = visibleNews.filter((item) => {
       if (!folded) return true;
-      return item.title.toLowerCase().includes(folded);
+      const haystack = isGuest ? `${item.title} ${item.summary}` : item.title;
+      return haystack.toLowerCase().includes(folded);
     });
 
     const pages = Math.max(1, Math.ceil(list.length / NEWS_PAGE_SIZE) || 1);
@@ -150,7 +156,7 @@
     const rest = showLead ? slice.slice(1) : slice;
 
     const cards = rest.map((item) => `
-      <a class="card" href="news.html?id=${esc(item.id)}">
+      <a class="card" href="${esc(newsHref({ id: item.id }))}">
         <span class="card-media"><img src="${esc(item.cover)}" alt="${esc(item.coverAlt)}"></span>
         <span class="kicker"><time datetime="${esc(item.publishAt)}">${formatDate(item.publishAt)}</time></span>
         <span class="card-title">${esc(item.title)}</span>
@@ -159,7 +165,7 @@
       </a>`).join("");
 
     const leadHtml = lead ? `
-      <a class="lead" href="news.html?id=${esc(lead.id)}">
+      <a class="lead" href="${esc(newsHref({ id: lead.id }))}">
         <span class="lead-media"><img src="${esc(lead.cover)}" alt="${esc(lead.coverAlt)}"></span>
         <span class="lead-body">
           <span class="kicker"><time datetime="${esc(lead.publishAt)}">${formatDate(lead.publishAt)}</time></span>
@@ -169,22 +175,28 @@
         </span>
       </a>` : "";
 
-    const empty = list.length === 0 ? `
+    const empty = list.length === 0 ? (isGuest ? `
+      <div class="empty">
+        <h2>没有找到已公开的新闻</h2>
+        <p>可以换一个词，例如「量子随机数」或「校园招聘」。</p>
+        <a href="${esc(newsHref({ q: "量子随机数" }))}">搜索量子随机数</a>
+      </div>` : `
       <div class="empty">
         <h2>没有符合条件的新闻</h2>
         <p>可清空搜索后再试。</p>
         <a href="news.html">查看全部新闻</a>
-      </div>` : "";
+      </div>`) : "";
 
     const count = `<p class="result-line">共 ${list.length} 条${pages > 1 ? `，第 ${page} / ${pages} 页` : ""}</p>`;
     const pager = pagerNav((n) => newsHref({ q: keyword, page: n }), page, pages);
 
     view.innerHTML = `
-      ${crumbBar("新闻", "news.html")}
+      ${crumbBar("新闻", newsHref({}))}
       ${newsHead()}
       <form class="toolbar" method="get" action="news.html" role="search">
+        ${isGuest ? '<input type="hidden" name="guest" value="1">' : ""}
         <div class="search">
-          <input id="q" name="q" type="search" value="${esc(keyword)}" placeholder="搜索标题" autocomplete="off">
+          <input id="q" name="q" type="search" value="${esc(keyword)}" placeholder="${isGuest ? "搜索新闻" : "搜索标题"}" autocomplete="off">
         </div>
       </form>
       ${count}
@@ -259,9 +271,20 @@
   }
 
   function renderNewsDetail(id) {
-    const item = newsById(id);
+    const raw = newsById(id);
+    if (isGuest && raw && raw.level !== "public") {
+      view.innerHTML = `
+        <div class="empty">
+          <h2>这篇新闻需要登录后查看</h2>
+          <p>未登录只能阅读已公开的新闻。</p>
+          <a href="login.html">去登录</a>
+        </div>`;
+      setTitle("需要登录");
+      return;
+    }
+    const item = raw;
     if (!item) {
-      view.innerHTML = `<div class="empty"><h2>未找到这篇新闻</h2><p>它可能已从本期内容中撤下。</p><a href="news.html">返回新闻</a></div>`;
+      view.innerHTML = `<div class="empty"><h2>未找到这篇新闻</h2><p>它可能已从本期内容中撤下。</p><a href="${esc(newsHref({}))}">返回新闻</a></div>`;
       setTitle("未找到");
       return;
     }
@@ -279,10 +302,10 @@
 
     const related = (item.relatedIds || [])
       .map(newsById)
-      .filter(Boolean)
+      .filter((rel) => rel && (!isGuest || rel.level === "public"))
       .slice(0, 3)
       .map((rel) => `
-        <a href="news.html?id=${esc(rel.id)}">
+        <a href="${esc(newsHref({ id: rel.id }))}">
           <img src="${esc(rel.cover)}" alt="">
           <span>
             <strong>${esc(rel.title)}</strong>
@@ -291,8 +314,8 @@
         </a>`).join("");
 
     view.innerHTML = `
-      ${crumbBar("新闻", "news.html", item.title)}
-      <a class="back" href="news.html">返回新闻</a>
+      ${crumbBar("新闻", newsHref({}), item.title)}
+      <a class="back" href="${esc(newsHref({}))}">返回新闻</a>
       <article>
         <header class="article-head">
           <div class="kicker"><time datetime="${esc(item.publishAt)}">${formatDate(item.publishAt)}</time></div>

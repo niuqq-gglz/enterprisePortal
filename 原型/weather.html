@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>天气 · 企业员工门户</title>
+  <script>
+    if (new URLSearchParams(location.search).get("guest") === "1") {
+      document.documentElement.dataset.guest = "1";
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --body: #334155;
+      --muted: #64748b;
+      --faint: #94a3b8;
+      --line: #e2e8f0;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+    .frame { position: relative; min-height: 100vh; }
+    .account {
+      position: absolute;
+      top: 28px;
+      right: 40px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .leave { color: var(--muted); font-size: 14px; text-decoration: none; }
+    .leave:hover { color: var(--ink); }
+    .account-out { display: none; }
+    .enter {
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    html[data-guest="1"] .account-in { display: none; }
+    html[data-guest="1"] .account-out { display: flex; }
+    main {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 72px 0 64px;
+    }
+    .crumbs { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+    .crumbs a { color: var(--muted); text-decoration: none; }
+    .crumbs a:hover, .crumbs .cur { color: var(--ink); }
+    .page-head { margin-bottom: 20px; }
+    .page-head h1 { margin: 0; font-size: 28px; font-weight: 650; letter-spacing: -0.02em; }
+    .page-head p { margin: 8px 0 0; max-width: 640px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .now {
+      padding: 22px 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-end;
+    }
+    .place { margin: 0; color: var(--muted); font-size: 13px; }
+    .temp { margin: 8px 0 0; font-size: 64px; font-weight: 650; letter-spacing: -0.04em; line-height: 0.9; }
+    .temp span { margin-left: 2px; font-size: 22px; font-weight: 500; color: var(--muted); }
+    .cond { margin: 10px 0 0; font-size: 16px; }
+    .facts { margin: 0; color: var(--body); font-size: 14px; line-height: 1.8; text-align: right; }
+    .days {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .day {
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .day b, .day span { display: block; }
+    .day .d { color: var(--muted); font-size: 13px; font-weight: 500; }
+    .day .sky { margin: 10px 0; font-size: 14px; font-weight: 600; }
+    .day .hi { font-size: 18px; font-weight: 650; }
+    .day .lo { margin-top: 4px; color: var(--faint); font-size: 13px; }
+    @media (max-width: 800px) {
+      .account { right: 20px; }
+      .now { flex-direction: column; align-items: flex-start; }
+      .facts { text-align: left; }
+      .days { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="account account-in"><span>name@ggquanta.com</span><a class="leave" href="index.html">退出</a></div>
+    <div class="account account-out"><a class="leave" href="register.html">注册</a><a class="enter" href="login.html">登录</a></div>
+    <main>
+      <nav class="crumbs" aria-label="面包屑">
+        <a id="home-link" href="homepage-mockup.html">首页</a>
+        <span aria-hidden="true">/</span>
+        <span class="cur">天气</span>
+      </nav>
+      <div class="page-head">
+        <h1>天气</h1>
+        <p>展示门户统一配置的城市。不按个人定位，也不保存历史天气。</p>
+      </div>
+      <section class="card now" aria-label="北京当前天气">
+        <div>
+          <p class="place">北京</p>
+          <p class="temp">19<span>°C</span></p>
+          <p class="cond">晴间多云</p>
+        </div>
+        <p class="facts">
+          体感 17°<br />
+          湿度 46%<br />
+          东北风 2 级
+        </p>
+      </section>
+      <div class="days">
+        <article class="card day"><span class="d">今天 · 周四</span><span class="sky">晴间多云</span><span class="hi">19°</span><span class="lo">9°</span></article>
+        <article class="card day"><span class="d">周五</span><span class="sky">多云</span><span class="hi">18°</span><span class="lo">8°</span></article>
+        <article class="card day"><span class="d">周六</span><span class="sky">小雨</span><span class="hi">15°</span><span class="lo">7°</span></article>
+        <article class="card day"><span class="d">周日</span><span class="sky">多云</span><span class="hi">16°</span><span class="lo">6°</span></article>
+        <article class="card day"><span class="d">周一</span><span class="sky">晴</span><span class="hi">20°</span><span class="lo">9°</span></article>
+      </div>
+    </main>
+  </div>
+  <script>
+    if (document.documentElement.dataset.guest === "1") {
+      document.getElementById("home-link").href = "index.html";
+    }
+  </script>
+</body>
+</html>

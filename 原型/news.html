@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>新闻 · 企业员工门户</title>
   <link rel="stylesheet" href="news.css" />
+  <script>
+    if (new URLSearchParams(location.search).get("guest") === "1") {
+      document.documentElement.dataset.guest = "1";
+    }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">跳到主要内容</a>
   <div class="frame">
-    <div class="account"><span>name@ggquanta.com</span><a class="leave" href="index.html">退出</a></div>
+    <div class="account account-in"><span>name@ggquanta.com</span><a class="leave" href="index.html">退出</a></div>
+    <div class="account account-out"><a class="leave" href="register.html">注册</a><a class="enter" href="login.html">登录</a></div>
     <main id="main">
       <div id="view"></div>
     </main>
@@ -17,7 +23,7 @@
     <footer>
       <div class="footer-inner">
         <div>新闻供传阅，不作为办事依据。</div>
-        <div class="footer-links">
+        <div class="footer-links footer-internal">
           <a href="resources.html">制度与资料</a>
           <a href="help.html" hidden style="display:none">帮助支持</a>
         </div>
