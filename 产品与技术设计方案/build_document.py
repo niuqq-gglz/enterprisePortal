@@ -275,6 +275,24 @@ code {
   border-radius: 2pt;
 }
 pre code { background: transparent; padding: 0; }
+figure.design-figure {
+  margin: 8pt 0 12pt;
+  break-inside: avoid;
+}
+figure.design-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4pt;
+  box-shadow: inset 0 0 0 0.6pt var(--border);
+}
+figure.design-figure figcaption {
+  margin-top: 5pt;
+  font-size: 8.5pt;
+  line-height: 1.5;
+  color: var(--stone);
+  text-align: center;
+}
 hr {
   border: 0;
   border-top: 0.5pt solid var(--border);
